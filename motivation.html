@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מחוז באר שבע - הכי מגובשות שיש</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --soft-pink: #fdf2f8;
+            --deep-blue: #1e3a8a;
+            --accent-pink: #db2777;
+            --whatsapp-green: #25D366;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fce7f3 0%, #e0f2fe 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 40px 30px;
+            border-radius: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            text-align: center;
+            max-width: 500px;
+            width: 85%;
+            border: 2px solid #fff;
+        }
+
+        .unit-label {
+            display: inline-block;
+            background: var(--deep-blue);
+            color: white;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        h1 {
+            color: var(--accent-pink);
+            margin: 10px 0;
+            font-size: 28px;
+        }
+
+        #message-display {
+            background: white;
+            border: 2px solid #f9a8d4;
+            border-radius: 25px;
+            padding: 30px;
+            margin: 25px 0;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            line-height: 1.5;
+            color: #374151;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .btn-inspire {
+            background: linear-gradient(45deg, #db2777, #f472b6);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            font-size: 22px;
+            font-weight: bold;
+            border-radius: 100px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(219, 39, 119, 0.3);
+            transition: transform 0.2s;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        /* כפתור הוואטסאפ החדש */
+        .btn-whatsapp {
+            background-color: var(--whatsapp-green);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 100px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            text-decoration: none;
+            transition: background-color 0.2s;
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.2);
+        }
+
+        .btn-whatsapp:hover {
+            background-color: #1eb956;
+        }
+
+        .btn-inspire:active, .btn-whatsapp:active {
+            transform: scale(0.95);
+        }
+
+        .sub-text {
+            margin-top: 25px;
+            font-size: 14px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div id="unit-tag" class="unit-label">מחוז באר שבע</div>
+        <h1>מחוז מספר 1! 🏆</h1>
+        
+        <div id="message-display">
+            מוכנות לרגע של גאווה? <br> לחצי על הכפתור למסר אישי...
+        </div>
+
+        <button class="btn-inspire" onclick="nextUnitMessage()">לחצי למסר הבא ✨</button>
+        
+        <button class="btn-whatsapp" onclick="shareOnWhatsApp()">
+            <span>שלחי פרגון ב-WhatsApp</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.417-.003 6.557-5.338 11.892-11.893 11.892-1.997-.001-3.951-.5-5.688-1.448l-6.305 1.652zm6.599-3.835c1.406.836 2.964 1.277 4.56 1.278 4.904 0 8.895-3.991 8.897-8.895.001-2.377-.924-4.611-2.603-6.291-1.679-1.68-3.915-2.603-6.291-2.603-4.904 0-8.895 3.991-8.897 8.896 0 1.655.459 3.268 1.326 4.678l-1.002 3.659 3.748-.983zm10.706-5.183c-.271-.136-1.603-.791-1.851-.881-.249-.091-.43-.136-.612.136-.182.271-.703.881-.861 1.062-.158.182-.317.204-.588.068-.271-.136-1.146-.423-2.184-1.348-.807-.72-1.352-1.611-1.511-1.882-.158-.271-.017-.417.118-.552.122-.122.271-.317.407-.475.136-.158.182-.271.272-.452.09-.181.045-.339-.022-.475-.068-.136-.612-1.474-.838-2.017-.22-.53-.441-.458-.612-.467-.158-.008-.339-.01-.521-.01s-.475.068-.724.339c-.249.271-.95.928-.95 2.264 0 1.335.973 2.626 1.109 2.807.136.181 1.914 2.922 4.637 4.1c.648.281 1.153.448 1.547.573.651.207 1.243.178 1.711.108.522-.078 1.603-.656 1.829-1.266.226-.609.226-1.131.158-1.243-.068-.112-.249-.181-.52-.317z"/></svg>
+        </button>
+
+        <div class="sub-text">הנבחרת המגובשת ביותר במשרד הביטחון</div>
+    </div>
+
+    <script>
+        const unitData = [
+            {
+                unit: "יחידת המרפאה",
+                msg: "לנבחרת המרפאה - אתן הלב הפועם והמרגיע של המחוז. תודה על הטיפול המסור והלב הענק שאתן נותנות לכל פונה!"
+            },
+            {
+                unit: "יחידת הרווחה",
+                msg: "בנות הרווחה היקרות - אתן הרוח הגבית והכוח המניע של אגף השיקום. הנתינה שלכן היא השראה לכולנו!"
+            },
+            {
+                unit: "עובדות סוציאליות",
+                msg: "לעובדות הסוציאליות המדהימות - עבודת הקודש שלכן עם הפצועים והמשפחות היא עמוד התווך של המחוז. אתן גיבורות!"
+            },
+            {
+                unit: "קשרי לקוחות",
+                msg: "בנות קשרי הלקוחות - החיוך, הסבלנות והמקצועיות שלכן הם הפנים המאירות של המחוז. אין עליכן!"
+            },
+            {
+                unit: "המנהלה",
+                msg: "צוות המנהלה היקר - אתן אלו שגורמות להכל לעבוד בצורה מושלמת מאחורי הקלעים. בלעדיכן שום דבר לא קורה!"
+            },
+            {
+                unit: "מנהלת המחוז",
+                msg: "למנהלת המחוז שלנו - תודה על ההובלה, החזון ועל כך שאת דואגת שנהיה המחוז הכי טוב והכי מגובש שיש!"
+            },
+            {
+                unit: "גאוות יחידה",
+                msg: "מחוז באר שבע הוא לא רק מקום עבודה, הוא משפחה נשית עוצמתית ומגובשת. פשוט המחוז הכי טוב בארץ!"
+            }
+        ];
+
+        let currentIndex = 0;
+
+        function nextUnitMessage() {
+            const tag = document.getElementById('unit-tag');
+            const display = document.getElementById('message-display');
+            
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#db2777', '#1e3a8a', '#ffffff']
+            });
+
+            const currentItem = unitData[currentIndex];
+            
+            display.style.transform = "scale(0.95)";
+            display.style.opacity = "0";
+
+            setTimeout(() => {
+                tag.innerText = currentItem.unit;
+                display.innerText = currentItem.msg;
+                display.style.transform = "scale(1)";
+                display.style.opacity = "1";
+                
+                currentIndex = (currentIndex + 1) % unitData.length;
+            }, 200);
+        }
+
+        // פונקציית השיתוף החדשה
+        function shareOnWhatsApp() {
+            const currentMsg = document.getElementById('message-display').innerText;
+            const unitName = document.getElementById('unit-tag').innerText;
+            
+            // יצירת הטקסט לשיתוף
+            const intro = "היי יקירה, רציתי לשתף אותך במסר מעצים ממחוז באר שבע: \n\n";
+            const fullText = intro + "*" + unitName + "*\n" + currentMsg + "\n\nאוהבת ומעריכה! ❤️";
+            
+            // קידוד הטקסט לפורמט של קישור
+            const encodedText = encodeURIComponent(fullText);
+            const whatsappUrl = `https://wa.me/?text=${encodedText}`;
+            
+            // פתיחת וואטסאפ
+            window.open(whatsappUrl, '_blank');
+        }
+    </script>
+</body>
+</html>
