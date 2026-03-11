@@ -3,162 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>מחוז באר שבע - המחוז הכי טוב שיש!</title>
+    <title>מחוז באר שבע - הנבחרת המנצחת</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
         :root {
             --bg-color: #fdf2f8;
-            --card-bg: rgba(255, 255, 255, 0.9);
-            --accent: #fb7185;
-            --primary: #60a5fa;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --accent: #ec4899;
+            --primary: #3b82f6;
         }
 
         body {
-            background: linear-gradient(120deg, #fdf2f8 0%, #e0f2fe 100%);
+            background: linear-gradient(135deg, #fce7f3 0%, #dbeafe 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
             color: #1e293b;
         }
 
         .container {
             background: var(--card-bg);
-            padding: 40px 20px;
-            border-radius: 50px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+            padding: 40px 25px;
+            border-radius: 40px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
             text-align: center;
-            max-width: 550px;
+            max-width: 500px;
             width: 90%;
-            border: 3px solid #fff;
-            position: relative;
+            border: 2px solid #fff;
         }
 
-        .badge {
-            background: var(--accent);
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
+        .header-tag {
+            background: #fbcfe8;
+            color: #9d174d;
+            padding: 6px 18px;
+            border-radius: 50px;
             font-size: 14px;
             font-weight: bold;
-            margin-bottom: 15px;
             display: inline-block;
+            margin-bottom: 15px;
         }
 
         h1 {
-            color: #1d4ed8;
-            margin: 10px 0;
-            font-size: 32px;
+            color: #1e3a8a;
+            margin: 5px 0;
+            font-size: 30px;
         }
 
-        .units-list {
-            font-size: 16px;
+        .units-nav {
+            font-size: 15px;
             color: #64748b;
-            margin-bottom: 25px;
+            margin: 15px 0 25px;
+            line-height: 1.6;
         }
 
-        #message-area {
-            background: white;
-            border-radius: 30px;
-            padding: 30px;
-            margin: 20px 0;
-            min-height: 120px;
+        #message-box {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 25px;
+            padding: 25px;
+            margin-bottom: 30px;
+            min-height: 100px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 600;
-            color: #0f172a;
-            border: 2px solid #e2e8f0;
-            line-height: 1.6;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+            color: #334155;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
             transition: all 0.3s ease;
         }
 
-        .magic-btn {
-            background: linear-gradient(to right, #fb7185, #f43f5e);
+        .action-btn {
+            background: linear-gradient(45deg, #ec4899, #f472b6);
             color: white;
             border: none;
-            padding: 20px 50px;
-            font-size: 24px;
-            border-radius: 100px;
+            padding: 18px 45px;
+            font-size: 22px;
+            border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 10px 25px rgba(244, 63, 94, 0.3);
-            transition: all 0.2s;
+            box-shadow: 0 10px 20px rgba(236, 72, 153, 0.3);
             font-weight: bold;
+            transition: transform 0.2s;
         }
 
-        .magic-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(244, 63, 94, 0.4);
-        }
+        .action-btn:active { transform: scale(0.95); }
 
-        .magic-btn:active {
-            transform: scale(0.95);
-        }
-
-        .unit-tag {
-            font-size: 12px;
-            color: #fb7185;
-            display: block;
-            margin-top: 10px;
-            font-weight: bold;
-            text-transform: uppercase;
+        .footer-text {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #94a3b8;
+            font-weight: 500;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <div class="badge">הנבחרת המנצחת 🏆</div>
+        <div class="header-tag">המחוז הכי טוב שיש! 🏆</div>
         <h1>מחוז באר שבע</h1>
-        <div class="units-list">
-            קשרי לקוחות | מרפאה | רווחה | עבודה סוציאלית | כח"ל
+        
+        <div class="units-nav">
+            מרפאה • רווחה • עובדים סוציאלים • קשרי לקוחות • מנהלה
         </div>
 
-        <div id="message-area">
-            מוכנות להזכיר לעצמכן למה אתן הכי טובות? <br> לחצו למטה!
+        <div id="message-box">
+            מחכות למסר המיוחד שלכן? <br> לחצו על הכפתור! ✨
         </div>
 
-        <button class="magic-btn" onclick="showMotivation()">לחצי למסר מהלב ✨</button>
+        <button class="action-btn" onclick="deliverMessage()">לחצי לקבלת מסר ✨</button>
 
-        <p style="margin-top: 30px; color: #94a3b8; font-size: 14px;">
-            מחוז באר שבע - המחוז הכי מגובש והכי טוב שיש!
-        </p>
+        <div class="footer-text">
+            באר שבע - המחוז הכי מגובש במשרד הביטחון!
+        </div>
     </div>
 
     <script>
         const messages = [
-            { text: "אין על בנות מחוז באר שבע - המחוז הכי חזק, הכי משפחתי והכי מגובש בארץ!", unit: "גאוות יחידה" },
-            { text: "יחידת קשרי לקוחות שלנו - אתן הפנים היפות והחיוך שנותן תקווה לכל פונה. אלופות!", unit: "קשרי לקוחות" },
-            { text: "לצוות המרפאה המדהים - המסירות שלכן היא המרפא האמיתי. תודה על הלב הרחב!", unit: "מרפאה" },
-            { text: "בנות הרווחה - אתן הרוח הגבית והכוח המניע של המחוז. פשוט השראה!", unit: "רווחה" },
-            { text: "העובדות הסוציאליות שלנו - אתן עושות עבודת קודש עם רגישות אינסופית. גאים בכן!", unit: "עבודה סוציאלית" },
-            { text: "צוות כח''ל - אתן הכוח שמאחורי הקלעים שגורם להכל לקרות. מחוז ב''ש לא היה אותו דבר בלעדיכן!", unit: "כח''ל" },
-            { text: "מחוז באר שבע זה לא רק מקום עבודה, זו משפחה אחת גדולה ומגובשת. אין עליכן!", unit: "המחוז הכי טוב שיש" },
-            { text: "לראות אתכן עובדות יחד זה לראות עוצמה נשית במיטבה. אתן הכי טובות שיש!", unit: "גאווה דרומית" },
-            { text: "כל בוקר במחוז באר שבע הוא הזדמנות לראות את הנבחרת המגובשת ביותר במשרד הביטחון!", unit: "מחוז מספר 1" }
+            "אין על בנות מחוז באר שבע - אנחנו המחוז הכי חזק, הכי משפחתי והכי מגובש שיש!",
+            "צוות המנהלה ומנהלת המחוז המדהימה - אתן הלב הפועם שגורם להכל לעבוד בצורה מושלמת!",
+            "בנות קשרי הלקוחות - החיוך והשירות שלכן הם הפנים המאירות של מחוז באר שבע!",
+            "לצוות המרפאה שלנו - תודה על הטיפול המסור והלב הענק שאתן נותנות בכל יום!",
+            "בנות הרווחה והעובדים הסוציאלים - עבודת הקודש שלכן בשיקום היא השליחות הכי גדולה שיש!",
+            "מנהלת המחוז שלנו מובילה את הנבחרת הכי טובה בארץ. גאווה לעבוד כאן!",
+            "באר שבע זה לא רק מחוז, זו משפחה אחת גדולה שבה כל אחת היא כוכבת!",
+            "כל הכבוד למנהלה על התמיכה והמקצועיות - אתן הבסיס האיתן שלנו!",
+            "עובדים סוציאלים יקרים, הרגישות והכוח שלכם הם עמודי התווך של אגף השיקום!"
         ];
 
-        function showMotivation() {
-            // קונפטי חגיגי
+        function deliverMessage() {
+            // חגיגת קונפטי
             confetti({
                 particleCount: 150,
                 spread: 70,
                 origin: { y: 0.6 },
-                colors: ['#fb7185', '#60a5fa', '#fcd34d']
+                colors: ['#ec4899', '#3b82f6', '#ffffff']
             });
 
-            const display = document.getElementById('message-area');
+            const box = document.getElementById('message-box');
             const randomMsg = messages[Math.floor(Math.random() * messages.length)];
             
-            display.style.opacity = 0;
-            
+            box.style.opacity = 0;
             setTimeout(() => {
-                display.innerHTML = `<div>${randomMsg.text}<span class="unit-tag"># ${randomMsg.unit}</span></div>`;
-                display.style.opacity = 1;
+                box.innerText = randomMsg;
+                box.style.opacity = 1;
+                box.style.borderColor = "#fbcfe8";
             }, 200);
         }
     </script>
