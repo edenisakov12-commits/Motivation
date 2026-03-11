@@ -3,228 +3,227 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>הדייטים של עדן וירדן ❤️</title>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <title>הדייטים של עדן וירדן</title>
     <style>
         :root {
-            --eden-pink: #ffafbd;
-            --yarden-orange: #ffc3a0;
-            --accent: #ff4b2b;
-            --success: #4caf50;
+            --bg-color: #fff5f5;
+            --home-color: #ff9a9e;
+            --out-color: #a1c4fd;
+            --text-color: #4a4a4a;
         }
-        body { 
-            font-family: 'Segoe UI', sans-serif; 
-            background: linear-gradient(135deg, var(--eden-pink), var(--yarden-orange)); 
-            margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
             overflow-x: hidden;
         }
-        .main-card {
-            background: rgba(255, 255, 255, 0.95); padding: 25px; border-radius: 35px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1); text-align: center; width: 100%; max-width: 400px;
-            animation: slideInUp 0.6s ease-out;
-        }
-        @keyframes slideInUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-        h1 { color: var(--accent); margin-bottom: 5px; font-size: 1.6rem; }
-        .names { font-weight: bold; color: #777; margin-bottom: 20px; }
-        
-        .game-buttons { display: flex; gap: 15px; margin-bottom: 20px; }
-        .choice-btn {
-            flex: 1; padding: 15px; border-radius: 25px; border: none; cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex; flex-direction: column; align-items: center; font-weight: bold;
-            box-shadow: 0 6px 0 #ddd; position: relative; top: 0;
+        header {
+            margin-top: 20px;
+            text-align: center;
         }
-        .choice-btn:active { top: 4px; box-shadow: 0 2px 0 #ddd; transform: scale(0.95); }
-        .btn-home { background: #fff0f6; color: #d81b60; }
-        .btn-out { background: #e6f7ff; color: #0077b6; }
 
-        /* חלונית מעוצבת */
-        #modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: center;
-            backdrop-filter: blur(5px);
+        .container {
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            margin-top: 30px;
         }
-        .modal-content {
-            background: white; padding: 35px; border-radius: 40px; width: 85%; max-width: 380px; text-align: center;
-            position: relative; animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        @keyframes popIn { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-        .idea-display { transition: all 0.3s ease; }
-        .fade-out { opacity: 0; transform: scale(0.9); }
-        .fade-in { opacity: 1; transform: scale(1); }
-
-        .nav-btn {
-            position: absolute; top: 50%; transform: translateY(-50%);
-            background: var(--accent); color: white; border: none; width: 45px; height: 45px; 
-            border-radius: 50%; cursor: pointer; font-size: 1.2rem; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            z-index: 10;
+        /* כרטיסי בחירה ראשיים */
+        .main-cards {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 30px;
         }
-        .prev { right: -20px; }
-        .next { left: -20px; }
 
-        .action-btn { 
-            width: 100%; padding: 14px; margin: 8px 0; border-radius: 50px; border: none; 
-            font-weight: bold; cursor: pointer; transition: 0.2s;
+        .category-card {
+            width: 140px;
+            height: 180px;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            font-weight: bold;
+            font-size: 1.2rem;
         }
-        .wish-btn { background: #fff3e0; color: #ef6c00; }
-        .done-btn { background: var(--success); color: white; box-shadow: 0 4px 0 #388e3c; }
-        .done-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #388e3c; }
-        
-        .list-section {
-            width: 100%; max-width: 400px; margin-top: 25px; background: white; border-radius: 25px; padding: 20px;
+
+        .category-card:hover { transform: scale(1.05); }
+        .home { background-color: var(--home-color); color: white; }
+        .out { background-color: var(--out-color); color: white; }
+
+        /* אזור הדייטים */
+        #date-display {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 25px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            position: relative;
+            animation: fadeIn 0.5s;
         }
-        .list-item { 
-            display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #f0f0f0; 
-            animation: slideInLeft 0.3s ease;
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .date-content { font-size: 1.5rem; margin-bottom: 20px; min-height: 80px; }
+
+        .nav-buttons { display: flex; justify-content: space-between; margin-bottom: 20px; }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
         }
-        @keyframes slideInLeft { from { transform: translateX(20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        .action-buttons { display: flex; gap: 10px; justify-content: center; }
+        .done-btn { background-color: #81c784; color: white; }
+        .maybe-btn { background-color: #ffd54f; color: white; }
+        .reset-btn { margin-top: 50px; background-color: #e0e0e0; font-size: 0.8rem; }
+
+        .status-badge { font-size: 0.9rem; color: #ff6b6b; margin-top: 10px; display: block; }
     </style>
 </head>
 <body>
 
-    <div class="main-card">
-        <h1>הדייטים שלנו ❤️</h1>
-        <div class="names">עדן & ירדן</div>
-        <div class="game-buttons">
-            <button class="choice-btn btn-home" onclick="startPick('home')">
-                <span style="font-size: 2.5rem;">🏠</span>בבית
-            </button>
-            <button class="choice-btn btn-out" onclick="startPick('out')">
-                <span style="font-size: 2.5rem;">🚗</span>בחוץ
-            </button>
+    <header>
+        <h1>💕 עדן & ירדן 💕</h1>
+        <p>מה עושים היום?</p>
+    </header>
+
+    <div class="container">
+        <div class="main-cards" id="main-menu">
+            <div class="category-card home" onclick="startDates('home')">🏠<br>דייט בבית</div>
+            <div class="category-card out" onclick="startDates('out')">🌳<br>דייט בחוץ</div>
         </div>
-        <div id="counter-display" style="font-weight: bold; color: var(--accent); font-size: 1.2rem;">דייטים שעשינו: 0</div>
-    </div>
 
-    <div class="list-section" id="wishlist-container" style="display:none;">
-        <h3 style="margin:0 0 15px 0; font-size: 1rem; color: #555;">🤔 מחכים לביצוע:</h3>
-        <div id="wishlist-items"></div>
-    </div>
-
-    <div id="modal">
-        <div class="modal-content">
-            <button class="nav-btn prev" onclick="changeIdea(1)">❯</button>
-            <button class="nav-btn next" onclick="changeIdea(-1)">❮</button>
-
-            <div id="idea-body" class="idea-display">
-                <div id="res-emoji" style="font-size: 4.5rem; margin-bottom: 10px;"></div>
-                <h2 id="res-title" style="margin: 10px 0; color: #333;"></h2>
-                <p id="res-desc" style="color: #666; font-size: 1rem; min-height: 50px;"></p>
+        <div id="date-display">
+            <div class="nav-buttons">
+                <button onclick="prevDate()">➡️ הקודם</button>
+                <button onclick="nextDate()">הבא ⬅️</button>
             </div>
             
-            <button class="action-btn wish-btn" onclick="addToWishlist()">✨ נשמע טוב, נשמור!</button>
-            <button class="action-btn done-btn" onclick="markAsDoneCurrent()">🎉 עשינו את זה!</button>
-            <button onclick="closeModal()" style="background:none; border:none; color:#999; margin-top:15px; cursor:pointer;">אולי פעם אחרת</button>
+            <div class="date-content" id="date-text"></div>
+            <span id="status" class="status-badge"></span>
+
+            <div class="action-buttons">
+                <button class="done-btn" onclick="markDone()">✅ עשינו את זה!</button>
+                <button class="maybe-btn" onclick="markMaybe()">🤔 מתלבטים...</button>
+            </div>
+            
+            <button onclick="goBack()" style="margin-top: 20px; background: none; color: #aaa;">חזרה לתפריט</button>
         </div>
+
+        <button class="reset-btn" onclick="resetAll()">🔄 איפוס הכל מחדש</button>
     </div>
 
     <script>
+        // מאגר דייטים - כאן אפשר להוסיף עוד המון רעיונות!
         const database = {
             home: [
-                {t: "ערב שוקולד ויין", d: "טעימות עיוורות של שוקולדים ויין טוב", e: "🍷"},
-                {t: "בניית מבצר בסלון", d: "שמיכות, כריות וסרט בתוך מבצר", e: "🏰"},
-                {t: "ערב אלבומי תמונות", d: "נזכרים יחד ברגעים היפים שלנו", e: "📸"},
-                {t: "פיקניק בסלון", d: "שמיכה על הרצפה וארוחה קלילה", e: "🧺"},
-                {t: "ערב משחקי קופסה", d: "תחרות טאקי או מונופול", e: "🎲"},
-                {t: "ספא ביתי", d: "מסאז' מפנק עם שמנים ונרות", e: "🕯️"}
+                { id: 1, text: "תחרות בישול של מנה מ-3 מרכיבים בלבד 🍳", done: false, maybe: false },
+                { id: 2, text: "ערב סרטים נוסטלגיים מהילדות עם פופקורן 🍿", done: false, maybe: false },
+                { id: 3, text: "בניית 'מבצר' משמיכות וכריות בסלון 🏰", done: false, maybe: false },
+                { id: 4, text: "משחק קופסה תחרותי עם פרס למנצח 🎲", done: false, maybe: false }
             ],
             out: [
-                {t: "הופעת סטנד-אפ", d: "יוצאים לצחוק מכל הלב", e: "🎤"},
-                {t: "פיקניק שקיעה", d: "קפה ומאפה מול הגלים", e: "🌅"},
-                {t: "דייט גלידה", d: "סיבוב לילי מתוק", e: "🍦"},
-                {t: "ערב קריוקי", d: "שרים יחד את השירים שלנו", e: "🎶"},
-                {t: "הליכה לילית", d: "פשוט לדבר וללכת יד ביד", e: "🌙"},
-                {t: "סרט ב-VIP", d: "מתפנקים בכורסאות נוחות", e: "🎟️"}
+                { id: 101, text: "פיקניק לילי בפארק עם יין וגבינות 🍷", done: false, maybe: false },
+                { id: 102, text: "טיול בנמל בשקיעה עם גלידה 🍦", done: false, maybe: false },
+                { id: 103, text: "סדנת קרמיקה או ציור זוגית 🎨", done: false, maybe: false },
+                { id: 104, text: "ביקור במקום שמעולם לא הייתם בו בעיר 📍", done: false, maybe: false }
             ]
         };
 
-        let currentType = 'home', currentIndex = 0;
-        let doneCount = parseInt(localStorage.getItem('dates_done_count')) || 0;
-        let wishlist = JSON.parse(localStorage.getItem('dates_wishlist')) || [];
+        let currentCategory = '';
+        let currentIndex = 0;
 
-        function startPick(type) {
-            currentType = type;
-            currentIndex = Math.floor(Math.random() * database[type].length);
-            updateModal();
-            document.getElementById('modal').style.display = 'flex';
+        function startDates(category) {
+            currentCategory = category;
+            currentIndex = 0;
+            document.getElementById('main-menu').style.display = 'none';
+            document.getElementById('date-display').style.display = 'block';
+            updateDisplay();
+            showEmojiAnimation('✨');
         }
 
-        function changeIdea(direction) {
-            const body = document.getElementById('idea-body');
-            body.classList.add('fade-out');
-            setTimeout(() => {
-                const list = database[currentType];
-                currentIndex = (currentIndex + direction + list.length) % list.length;
-                updateModal();
-                body.classList.remove('fade-out');
-            }, 200);
+        function updateDisplay() {
+            const date = database[currentCategory][currentIndex];
+            document.getElementById('date-text').innerText = date.text;
+            
+            let statusText = '';
+            if (date.done) statusText = '✅ כבר עשינו את זה!';
+            else if (date.maybe) statusText = '🤔 סימנו כהתלבטות';
+            document.getElementById('status').innerText = statusText;
         }
 
-        function updateModal() {
-            const idea = database[currentType][currentIndex];
-            document.getElementById('res-emoji').innerText = idea.e;
-            document.getElementById('res-title').innerText = idea.t;
-            document.getElementById('res-desc').innerText = idea.d;
-        }
-
-        function fireConfetti() {
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#ffafbd', '#ffc3a0', '#ff4b2b'] });
-        }
-
-        function markAsDoneCurrent() {
-            doneCount++;
-            fireConfetti();
-            setTimeout(() => { save(); closeModal(); }, 500);
-        }
-
-        function addToWishlist() {
-            const idea = database[currentType][currentIndex];
-            if (!wishlist.find(i => i.t === idea.t)) {
-                wishlist.push(idea);
-                save();
+        function nextDate() {
+            if (currentIndex < database[currentCategory].length - 1) {
+                currentIndex++;
+                updateDisplay();
             }
-            closeModal();
         }
 
-        function markAsDoneFromList(index) {
-            wishlist.splice(index, 1);
-            doneCount++;
-            fireConfetti();
-            save();
+        function prevDate() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateDisplay();
+            }
         }
 
-        function save() {
-            localStorage.setItem('dates_done_count', doneCount);
-            localStorage.setItem('dates_wishlist', JSON.stringify(wishlist));
-            render();
+        function markDone() {
+            database[currentCategory][currentIndex].done = true;
+            showEmojiAnimation('🎉');
+            updateDisplay();
         }
 
-        function render() {
-            document.getElementById('counter-display').innerText = `דייטים שעשינו: ${doneCount}`;
-            const listDiv = document.getElementById('wishlist-items');
-            const container = document.getElementById('wishlist-container');
-            listDiv.innerHTML = "";
-            if (wishlist.length > 0) {
-                container.style.display = 'block';
-                wishlist.forEach((item, index) => {
-                    listDiv.innerHTML += `
-                        <div class="list-item">
-                            <span>${item.e} ${item.t}</span>
-                            <div>
-                                <span style="cursor:pointer" onclick="markAsDoneFromList(${index})">✅</span>
-                                <span style="cursor:pointer; margin-right:12px;" onclick="removeFromList(${index})">🗑️</span>
-                            </div>
-                        </div>`;
-                });
-            } else { container.style.display = 'none'; }
+        function markMaybe() {
+            database[currentCategory][currentIndex].maybe = true;
+            showEmojiAnimation('💭');
+            updateDisplay();
         }
 
-        function removeFromList(index) { wishlist.splice(index, 1); save(); }
-        function closeModal() { document.getElementById('modal').style.display = 'none'; }
-        render();
+        function goBack() {
+            document.getElementById('main-menu').style.display = 'flex';
+            document.getElementById('date-display').style.display = 'none';
+        }
+
+        function resetAll() {
+            if(confirm("בטוחה שאת רוצה לאפס את כל ההתקדמות?")) {
+                location.reload();
+            }
+        }
+
+        function showEmojiAnimation(emoji) {
+            const div = document.createElement('div');
+            div.innerText = emoji;
+            div.style.position = 'fixed';
+            div.style.left = Math.random() * 80 + 10 + '%';
+            div.style.top = '100%';
+            div.style.fontSize = '3rem';
+            div.style.transition = 'all 2s';
+            div.style.zIndex = '1000';
+            document.body.appendChild(div);
+            
+            setTimeout(() => {
+                div.style.top = '-10%';
+                div.style.opacity = '0';
+            }, 100);
+            
+            setTimeout(() => div.remove(), 2000);
+        }
     </script>
 </body>
 </html>
