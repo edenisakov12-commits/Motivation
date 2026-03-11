@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מחוז באר שבע - רגע של השראה</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #a8dadc;
+            --secondary-color: #f1faee;
+            --accent-color: #457b9d;
+            --text-color: #1d3557;
+        }
+
+        body {
+            background: linear-gradient(-45deg, #fce4ec, #e3f2fd, #f1f8e9, #fff3e0);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            color: var(--text-color);
+            overflow: hidden;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            border: 2px solid white;
+        }
+
+        h1 {
+            color: var(--accent-color);
+            margin-bottom: 5px;
+            font-size: 28px;
+        }
+
+        h2 {
+            color: #ec407a;
+            font-size: 18px;
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+
+        .message-box {
+            background: white;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 25px;
+            padding: 20px;
+            margin-bottom: 30px;
+            font-size: 20px;
+            font-weight: 500;
+            border: 2px dashed var(--primary-color);
+            transition: all 0.3s ease;
+        }
+
+        .btn-magic {
+            background: linear-gradient(45deg, #ff8aaf, #ffc1e3);
+            color: white;
+            border: none;
+            padding: 18px 45px;
+            font-size: 22px;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(236, 64, 122, 0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-weight: bold;
+        }
+
+        .btn-magic:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(236, 64, 122, 0.3);
+        }
+
+        .btn-magic:active {
+            transform: scale(0.95);
+        }
+
+        /* אנימציית רעידה קלה לתיבה */
+        .shake {
+            animation: shakeAnim 0.4s ease-in-out;
+        }
+
+        @keyframes shakeAnim {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(5px); }
+            50% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+            100% { transform: translateX(0); }
+        }
+
+        .footer-note {
+            margin-top: 25px;
+            font-size: 14px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>מחוז באר שבע</h1>
+        <h2>אגף השיקום - משרד הביטחון</h2>
+        
+        <div class="message-box" id="msg-display">
+            מוכנים לרגע של כוח? לחצו על הכפתור...
+        </div>
+
+        <button class="btn-magic" onclick="getInspiration()">קבלו מסר מחזק ✨</button>
+        
+        <p class="footer-note">עבודת הקודש שלכם היא הלב של המערכת. תודה!</p>
+    </div>
+
+    <script>
+        const messages = [
+            "עובדות ועובדי מחוז ב''ש - אתם העוגן של המשפחות ברגעים הכי קשים! ❤️",
+            "הנתינה שלכם באגף השיקום היא קרן אור של תקווה 🌟",
+            "תזכרו: כל חיוך וכל עזרה שלכם משנים עולמות!",
+            "מחוז דרום גאה בכם על המסירות והלב הרחב! 💪",
+            "אתם הגיבורים שמאחורי הקלעים. תודה על הכל!",
+            "גם למטפלים מגיע רגע של טיפול. קחו נשימה עמוקה, אתם נפלאים!",
+            "העבודה שלכם באגף השיקום היא שליחות אמיתית 🙏",
+            "כל הכבוד על הסבלנות, ההכלה והמקצועיות שלכם בכל יום מחדש!"
+        ];
+
+        function getInspiration() {
+            const display = document.getElementById('msg-display');
+            
+            // הפעלת קונפטי
+            confetti({
+                particleCount: 120,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ff8aaf', '#a8dadc', '#457b9d']
+            });
+
+            // החלפת מסר עם אנימציה
+            display.classList.remove('shake');
+            void display.offsetWidth; // איפוס אנימציה
+            display.classList.add('shake');
+
+            const randomMsg = messages[Math.floor(Math.random() * messages.length)];
+            display.innerText = randomMsg;
+        }
+    </script>
+</body>
+</html>
