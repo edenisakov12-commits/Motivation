@@ -3,178 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eden & Yarden | Luxury Dates</title>
+    <title>Eden & Yarden | Love & Dates</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Assistant:wght@300;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --gold: #d4af37;
-            --rose: #ff85a1;
-            --soft-blue: #a1c4fd;
-            --cream: #fffaf0;
-            --glass: rgba(255, 255, 255, 0.8);
+            --warm-pink: #fbc2eb;
+            --soft-orange: #f6d365;
+            --cream: #fff9f0;
+            --rose-gold: #e5989b;
+            --text-dark: #6d597a;
         }
 
         body {
             font-family: 'Assistant', sans-serif;
-            background: linear-gradient(-45deg, #fff0f6, #fffaf0, #f0f7ff, #fff0f6);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            background: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
+            background-color: var(--cream);
             margin: 0;
             padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            color: var(--text-dark);
         }
 
         header h1 {
             font-family: 'Dancing Script', cursive;
-            font-size: 3.5rem;
-            color: var(--gold);
-            margin: 20px 0 10px 0;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-            animation: float 3s ease-in-out infinite;
+            font-size: 3.8rem;
+            color: var(--rose-gold);
+            margin: 30px 0;
+            animation: float 4s ease-in-out infinite;
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            0%, 100% { transform: translateY(0) rotate(-1deg); }
+            50% { transform: translateY(-15px) rotate(1deg); }
         }
 
         /* תפריט ראשי */
         .categories {
             display: flex;
-            gap: 25px;
-            margin-top: 30px;
-            perspective: 1000px;
+            gap: 20px;
+            margin-bottom: 40px;
         }
 
         .card-select {
-            width: 150px;
-            height: 200px;
-            border-radius: 40px;
+            width: 140px;
+            height: 190px;
+            border-radius: 35px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            border: 2px solid white;
-            background: var(--glass);
-            backdrop-filter: blur(10px);
+            transition: 0.4s;
+            background: white;
+            box-shadow: 0 10px 20px rgba(109, 89, 122, 0.1);
+            border: 2px solid rgba(229, 152, 155, 0.2);
         }
 
         .card-select:hover {
-            transform: rotateY(15deg) scale(1.1);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            transform: scale(1.08);
+            box-shadow: 0 15px 30px rgba(229, 152, 155, 0.3);
         }
 
-        .card-select .emoji {
-            font-size: 4rem; /* אימוג'י ענק */
-            margin-bottom: 10px;
-        }
-
-        .card-select span {
-            font-weight: 600;
-            color: #555;
-            font-size: 1.2rem;
-        }
+        .emoji-large { font-size: 4.5rem; margin-bottom: 10px; }
+        .card-label { font-weight: 600; font-size: 1.3rem; color: var(--text-dark); }
 
         /* אזור המשחק */
         #game-area {
             display: none;
             width: 100%;
-            max-width: 420px;
+            max-width: 400px;
             text-align: center;
-            margin-top: 30px;
         }
 
         .date-card {
             background: white;
-            border-radius: 50px;
-            padding: 50px 30px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            font-size: 1.8rem;
-            font-weight: 600;
-            margin-bottom: 30px;
-            min-height: 160px;
+            border-radius: 40px;
+            padding: 40px 25px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+            font-size: 1.7rem;
+            font-weight: bold;
+            min-height: 140px;
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
-            animation: popIn 0.6s cubic-bezier(0.25, 1.1, 0.5, 1.35);
+            margin-bottom: 30px;
+            border: 1px solid #eee;
+            animation: slideIn 0.5s ease-out;
         }
 
-        @keyframes popIn {
-            0% { transform: scale(0.5); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
+        @keyframes slideIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
 
-        /* כפתורי פעולה */
-        .btn-action {
-            width: 85%;
+        /* כפתורים */
+        .btn-main {
+            width: 90%;
             padding: 18px;
             border-radius: 25px;
             border: none;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: bold;
-            cursor: pointer;
             margin: 10px 0;
+            cursor: pointer;
             transition: 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 15px;
+            gap: 10px;
         }
 
-        .btn-want { background: linear-gradient(45deg, #63e6be, #20c997); color: white; }
-        .btn-maybe { background: linear-gradient(45deg, #ffd43b, #fab005); color: #5d4037; }
-        
-        .btn-action:hover {
-            transform: scale(1.03);
-            filter: brightness(1.1);
-        }
+        .btn-want { background: linear-gradient(to right, #ff9a9e 0%, #fecfef 100%); color: white; }
+        .btn-maybe { background: #fdfcfb; color: var(--text-dark); border: 2px solid #eee; }
+        .btn-history { background: #6d597a; color: white; width: 260px; }
 
-        .btn-action:active { transform: scale(0.95); }
-
-        /* רשימות מעוצבות */
+        /* מודאל רשימות */
         .modal {
-            display: none; position: fixed; inset: 0;
-            background: rgba(255,255,255,0.9); z-index: 2000;
-            padding: 40px 20px; overflow-y: auto;
-            backdrop-filter: blur(15px);
+            display: none; position: fixed; inset: 0; background: var(--cream);
+            z-index: 2000; padding: 40px 20px; overflow-y: auto;
         }
-
-        .list-card {
+        .list-item {
             background: white; padding: 20px; border-radius: 20px;
-            margin-bottom: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            border-right: 8px solid var(--gold);
-            text-align: right; font-size: 1.2rem;
-            animation: slideRight 0.4s ease-out;
+            margin-bottom: 15px; border-right: 6px solid var(--rose-gold);
+            text-align: right; box-shadow: 0 4px 10px rgba(0,0,0,0.03);
         }
 
-        @keyframes slideRight { from { transform: translateX(50px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-
-        /* ניווט */
-        .nav-circles {
-            display: flex; justify-content: center; gap: 40px; margin-bottom: 25px;
+        /* אנימציה של לבבות */
+        .heart {
+            position: fixed; font-size: 2rem; z-index: 3000;
+            pointer-events: none; animation: flyUp 2s ease-out forwards;
         }
-        .nav-btn {
-            background: white; border: none; width: 60px; height: 60px;
-            border-radius: 50%; font-size: 1.5rem; cursor: pointer;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: 0.3s;
+        @keyframes flyUp {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
         }
-        .nav-btn:hover { background: var(--gold); color: white; }
-
     </style>
 </head>
 <body>
@@ -183,131 +145,133 @@
         <h1>Eden & Yarden</h1>
     </header>
 
-    <div class="menu" id="main-menu">
+    <div id="main-menu" style="display: flex; flex-direction: column; align-items: center; width: 100%;">
         <div class="categories">
-            <div class="card-select" onclick="initGame('home')">
-                <div class="emoji">🏠</div>
-                <span>At Home</span>
+            <div class="card-select" onclick="openDates('home')">
+                <div class="emoji-large">🏠</div>
+                <div class="card-label">בבית</div>
             </div>
-            <div class="card-select" onclick="initGame('out')">
-                <div class="emoji">🌳</div>
-                <span>Outdoors</span>
+            <div class="card-select" onclick="openDates('out')">
+                <div class="emoji-large">🌳</div>
+                <div class="card-label">בחוץ</div>
             </div>
-        </div>
-        
-        <div style="margin-top: 40px; display: flex; flex-direction: column; gap: 15px; width: 100%; align-items: center;">
-            <button class="btn-action btn-maybe" style="width: 250px;" onclick="showList('maybe')"><span>🤔</span> ההתלבטויות שלנו</button>
-            <button class="btn-action btn-want" style="width: 250px; background: var(--rose);" onclick="showList('done')"><span>💖</span> דייטים שעשינו</button>
         </div>
 
-        <button onclick="fullReset()" style="margin-top: 60px; background: none; border: none; color: #ddd; cursor: pointer;">🔄 Reset App</button>
+        <button class="btn-main btn-maybe" style="width: 260px;" onclick="showList('maybe')">📋 ההתלבטויות שלנו</button>
+        <button class="btn-main btn-history" onclick="showList('done')">💖 היסטוריית הדייטים</button>
+        
+        <button onclick="softReset()" style="margin-top: 40px; background: none; border: none; color: #bbb; cursor: pointer; text-decoration: underline;">🔄 איפוס בחירות (ההיסטוריה תישמר)</button>
     </div>
 
     <div id="game-area">
-        <div class="nav-circles">
-            <button class="nav-btn" onclick="changeDate(-1)">➡️</button>
-            <button class="nav-btn" onclick="changeDate(1)">⬅️</button>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+            <button class="btn-main" style="width: 60px; height: 60px; border-radius: 50%;" onclick="navigate(-1)">➡️</button>
+            <button class="btn-main" style="width: 60px; height: 60px; border-radius: 50%;" onclick="navigate(1)">⬅️</button>
         </div>
 
-        <div class="date-card" id="card-text">✨</div>
+        <div class="date-card" id="card-text">טוען רעיון...</div>
+
+        <button class="btn-main btn-want" onclick="saveDate('done')">🌟 את זה אנחנו רוצים!</button>
+        <button class="btn-main btn-maybe" onclick="saveDate('maybe')">🤔 תוסיף להתלבטויות</button>
         
-        <div style="display: flex; flex-direction: column; align-items: center;">
-            <button class="btn-action btn-want" onclick="saveAction('done')"><span>🌟</span> את זה אנחנו רוצים!</button>
-            <button class="btn-action btn-maybe" onclick="saveAction('maybe')"><span>💭</span> אולי פעם אחרת?</button>
-        </div>
-
-        <button onclick="goHome()" style="margin-top: 30px; background: none; border: none; color: #aaa; font-weight: bold; cursor: pointer;">🔙 Back Home</button>
+        <button onclick="goHome()" style="margin-top: 30px; background: none; border: none; color: #aaa; cursor: pointer;">🔙 חזרה לתפריט</button>
     </div>
 
-    <div id="list-modal" class="modal">
-        <h2 id="modal-title" style="font-family: 'Dancing Script'; font-size: 3rem; color: var(--gold); text-align: center;"></h2>
+    <div id="modal" class="modal">
+        <h2 id="modal-title" style="font-family: 'Dancing Script'; font-size: 3rem; color: var(--rose-gold); text-align: center;"></h2>
         <div id="modal-content"></div>
-        <button class="btn-action" onclick="closeModal()" style="background: #333; color: white; margin-top: 20px;">Close</button>
+        <button class="btn-main" onclick="closeModal()" style="background: #444; color: white; margin-top: 20px;">סגור</button>
     </div>
 
     <script>
-        const database = {
-            home: ["סדנת שוקולד ביתית 🍫", "מרתון סרטים מצוירים עם פיג'מות 🧸", "תחרות בישול: המנה המנצחת של עדן מול ירדן 🥘", "ערב משחקי קופסה עם יין וגבינות 🍷", "בניית לוח חזון משותף לעתיד 🌟", "ערב קריוקי בסלון עד שמישהו מתעייף 🎤", "ספא ביתי עם נרות ומוזיקה מרגיעה 🕯️", "פיקניק על השטיח בסלון 🧺", "סידור אלבומי תמונות ישנים וזכרונות 📸", "ערב טעימות גלידה עיוור 🍦"],
-            out: ["טיול שקיעה רומנטי בחוף הים 🌅", "ערב סטנד-אפ שיגרום לכם לצחוק עד דמעות 🎤", "חדר בריחה מאתגר רק לשניכם 🔓", "טיול בוקר בשוק אוכל צבעוני 🍓", "צפייה בכוכבים עם שמיכה ויין במצפה 🌌", "סדנת קרמיקה זוגית (כמו בסרט Ghost) 🏺", "החלקה על הקרח או באולינג תחרותי 🎳", "פיקניק מושקע ביער קרוב 🌳", "ביקור במוזיאון אמנות או גלריה חדשה 🖼️", "נסיעה ספונטנית למקום שמעולם לא הייתם בו 🚗"]
+        const datePool = {
+            home: ["ערב סושי ביתי 🍣", "מרתון סרטים מצוירים 🎥", "תחרות בישול זוגית 🥘", "ערב משחקי קופסה ויין 🍷", "ספא ביתי מפנק 🕯️", "פיקניק על השטיח 🧺", "סידור אלבומי תמונות 📸", "ערב קריוקי בסלון 🎤", "בניית רשימת חלומות 📝", "סדנת קוקטיילים 🍸"],
+            out: ["טיול שקיעה בים 🌅", "הופעת סטנד-אפ 🎤", "חדר בריחה 🔓", "טיול בשוק אוכל 🍓", "צפייה בכוכבים 🌌", "סדנת קרמיקה 🏺", "החלקה על הקרח ⛸️", "באולינג תחרותי 🎳", "פיקניק ביער 🌳", "נסיעה ספונטנית 🚗"]
         };
+
+        // טעינת נתונים - שימי לב: היסטוריית ה-Done נשמרת בנפרד
+        let gameData = JSON.parse(localStorage.getItem('edenYarden_Data')) || { maybe: [] };
+        let historyData = JSON.parse(localStorage.getItem('edenYarden_History')) || [];
 
         let currentType = '';
         let currentIndex = 0;
-        let savedData = JSON.parse(localStorage.getItem('edenYardenLuxury')) || { done: [], maybe: [] };
 
-        function initGame(type) {
+        function openDates(type) {
             currentType = type;
             currentIndex = 0;
             document.getElementById('main-menu').style.display = 'none';
             document.getElementById('game-area').style.display = 'block';
-            updateCard();
-            magicBlast('✨');
+            updateUI();
+            celebrate('✨');
         }
 
-        function updateCard() {
-            const card = document.getElementById('card-text');
-            card.innerText = database[currentType][currentIndex];
-            card.style.animation = 'none';
-            card.offsetHeight; 
-            card.style.animation = 'popIn 0.6s cubic-bezier(0.25, 1.1, 0.5, 1.35)';
+        function updateUI() {
+            document.getElementById('card-text').innerText = datePool[currentType][currentIndex];
         }
 
-        function changeDate(step) {
-            currentIndex = (currentIndex + step + database[currentType].length) % database[currentType].length;
-            updateCard();
-            magicBlast('🃏');
+        function navigate(step) {
+            currentIndex = (currentIndex + step + datePool[currentType].length) % datePool[currentType].length;
+            updateUI();
         }
 
-        function saveAction(listType) {
-            const text = database[currentType][currentIndex];
-            if (!savedData[listType].includes(text)) {
-                savedData[listType].push(text);
-                localStorage.setItem('edenYardenLuxury', JSON.stringify(savedData));
-                magicBlast(listType === 'done' ? '💖' : '💭');
-                alert(listType === 'done' ? "נוסף לרשימת ההצלחות שלכם! ✨" : "נשמר להתלבטות... 🤔");
+        function saveDate(listType) {
+            const currentItem = datePool[currentType][currentIndex];
+            
+            if (listType === 'done') {
+                if (!historyData.includes(currentItem)) {
+                    historyData.push(currentItem);
+                    localStorage.setItem('edenYarden_History', JSON.stringify(historyData));
+                    celebrate('💖');
+                    alert("נוספו להיסטוריה שלכם! 🥂");
+                } else { alert("כבר עשיתם את זה! 😉"); }
             } else {
-                alert("כבר רשום לכם ברשימה!");
+                if (!gameData.maybe.includes(currentItem)) {
+                    gameData.maybe.push(currentItem);
+                    localStorage.setItem('edenYarden_Data', JSON.stringify(gameData));
+                    celebrate('💭');
+                    alert("נשמר בהתלבטויות.");
+                } else { alert("כבר נמצא בהתלבטויות שלכם."); }
             }
         }
 
         function showList(type) {
-            const modal = document.getElementById('list-modal');
+            const modal = document.getElementById('modal');
             const content = document.getElementById('modal-content');
             const title = document.getElementById('modal-title');
-            title.innerText = type === 'done' ? "Our Perfect Dates" : "Thinking About It...";
-            content.innerHTML = savedData[type].length ? savedData[type].map(i => `<div class="list-card">${i}</div>`).join('') : "<p style='text-align:center'>עוד אין פה כלום... צאו לדייט!</p>";
+            
+            title.innerText = type === 'done' ? "Our Love History" : "Thinking About...";
+            const listToDisplay = type === 'done' ? historyData : gameData.maybe;
+            
+            content.innerHTML = listToDisplay.length ? listToDisplay.map(i => `<div class="list-item">${i}</div>`).join('') : "<p style='text-align:center'>עוד אין כאן כלום...</p>";
             modal.style.display = 'block';
         }
 
-        function closeModal() { document.getElementById('list-modal').style.display = 'none'; }
+        function closeModal() { document.getElementById('modal').style.display = 'none'; }
         function goHome() { 
             document.getElementById('main-menu').style.display = 'flex';
             document.getElementById('game-area').style.display = 'none';
         }
 
-        function magicBlast(emoji) {
-            for (let i = 0; i < 20; i++) {
-                const e = document.createElement('div');
-                e.innerText = emoji;
-                e.style.position = 'fixed';
-                e.style.left = Math.random() * 100 + 'vw';
-                e.style.bottom = '-50px';
-                e.style.fontSize = Math.random() * 2 + 1 + 'rem';
-                e.style.zIndex = '3000';
-                e.style.transition = 'all ' + (Math.random() * 2 + 1) + 's ease-out';
-                document.body.appendChild(e);
-                setTimeout(() => {
-                    e.style.transform = `translateY(-110vh) rotate(${Math.random() * 360}deg)`;
-                    e.style.opacity = '0';
-                }, 50);
-                setTimeout(() => e.remove(), 3000);
+        // פונקציית האיפוס שביקשת - מאפסת רק את ה"אולי" ולא את ההיסטוריה
+        function softReset() {
+            if (confirm("לאפס את רשימת ההתלבטויות? (היסטוריית הדייטים שעשיתם תישמר!)")) {
+                gameData.maybe = [];
+                localStorage.setItem('edenYarden_Data', JSON.stringify(gameData));
+                celebrate('🔄');
+                location.reload();
             }
         }
 
-        function fullReset() {
-            if (confirm("Are you sure? This will delete all your memories!")) {
-                localStorage.clear();
-                location.reload();
+        function celebrate(emoji) {
+            for (let i = 0; i < 15; i++) {
+                const h = document.createElement('div');
+                h.className = 'heart';
+                h.innerText = emoji;
+                h.style.left = Math.random() * 100 + 'vw';
+                h.style.bottom = '-50px';
+                h.style.transition = `all ${Math.random() * 2 + 1}s ease-in`;
+                document.body.appendChild(h);
+                setTimeout(() => h.remove(), 2000);
             }
         }
     </script>
