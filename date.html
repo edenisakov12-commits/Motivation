@@ -3,226 +3,216 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>הדייטים של עדן וירדן</title>
+    <title>הדייטים של עדן וירדן ✨</title>
     <style>
         :root {
-            --bg-color: #fff5f5;
-            --home-color: #ff9a9e;
-            --out-color: #a1c4fd;
-            --text-color: #4a4a4a;
+            --bg: #fffaf0;
+            --primary: #ff8fa3;
+            --secondary: #8ecae6;
+            --accent: #ffb703;
+            --text: #5d4037;
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            background-color: var(--bg);
+            color: var(--text);
             margin: 0;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh;
             overflow-x: hidden;
         }
 
-        header {
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        .container {
-            width: 90%;
-            max-width: 500px;
-            text-align: center;
-            margin-top: 30px;
-        }
-
-        /* כרטיסי בחירה ראשיים */
-        .main-cards {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin-bottom: 30px;
-        }
-
-        .category-card {
-            width: 140px;
-            height: 180px;
-            border-radius: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            transition: transform 0.3s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-
-        .category-card:hover { transform: scale(1.05); }
-        .home { background-color: var(--home-color); color: white; }
-        .out { background-color: var(--out-color); color: white; }
-
-        /* אזור הדייטים */
-        #date-display {
-            display: none;
-            background: white;
-            padding: 30px;
+        h1 { font-size: 2.5rem; color: var(--primary); text-shadow: 2px 2px #fff; margin-bottom: 5px; }
+        
+        /* תפריט ראשי */
+        .menu { display: flex; gap: 20px; margin-top: 30px; }
+        .card-select {
+            width: 150px; height: 200px;
             border-radius: 25px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            position: relative;
-            animation: fadeIn 0.5s;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            cursor: pointer; transition: 0.3s;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            font-size: 1.4rem; font-weight: bold; border: 4px solid white;
+        }
+        .card-select:hover { transform: translateY(-10px) rotate(3deg); }
+        .home-bg { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); color: white; }
+        .out-bg { background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); color: white; }
+
+        /* קלף הדייט */
+        #game-area { display: none; width: 100%; max-width: 400px; text-align: center; margin-top: 20px; }
+        .date-card {
+            background: white; border-radius: 30px; padding: 40px 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            position: relative; border: 2px dashed var(--primary);
+            min-height: 150px; display: flex; align-items: center; justify-content: center;
+            font-size: 1.6rem; font-weight: bold; margin-bottom: 20px;
         }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* כפתורים */
+        .btn {
+            border: none; border-radius: 50px; padding: 12px 25px;
+            font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 1rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin: 5px;
+        }
+        .btn:active { transform: scale(0.9); }
+        .btn-next { background: var(--secondary); color: white; width: 80px; }
+        .btn-done { background: #81c784; color: white; }
+        .btn-maybe { background: var(--accent); color: white; }
+        .btn-list { background: #ba68c8; color: white; margin-top: 20px; }
 
-        .date-content { font-size: 1.5rem; margin-bottom: 20px; min-height: 80px; }
-
-        .nav-buttons { display: flex; justify-content: space-between; margin-bottom: 20px; }
-
-        button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 15px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.2s;
+        /* רשימת התלבטויות */
+        #maybe-list {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255,255,255,0.95); z-index: 100; padding: 30px;
+            overflow-y: auto; text-align: right;
         }
 
-        .action-buttons { display: flex; gap: 10px; justify-content: center; }
-        .done-btn { background-color: #81c784; color: white; }
-        .maybe-btn { background-color: #ffd54f; color: white; }
-        .reset-btn { margin-top: 50px; background-color: #e0e0e0; font-size: 0.8rem; }
-
-        .status-badge { font-size: 0.9rem; color: #ff6b6b; margin-top: 10px; display: block; }
+        /* אנימציות אימוג'ים */
+        .emoji-fly {
+            position: fixed; pointer-events: none; z-index: 999;
+            font-size: 2rem; animation: floatUp 1.5s forwards;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-400px) rotate(360deg); opacity: 0; }
+        }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>💕 עדן & ירדן 💕</h1>
-        <p>מה עושים היום?</p>
-    </header>
+    <h1>✨ עדן & ירדן ✨</h1>
+    <p>מה הדייט המושלם שלכם היום?</p>
 
-    <div class="container">
-        <div class="main-cards" id="main-menu">
-            <div class="category-card home" onclick="startDates('home')">🏠<br>דייט בבית</div>
-            <div class="category-card out" onclick="startDates('out')">🌳<br>דייט בחוץ</div>
-        </div>
-
-        <div id="date-display">
-            <div class="nav-buttons">
-                <button onclick="prevDate()">➡️ הקודם</button>
-                <button onclick="nextDate()">הבא ⬅️</button>
-            </div>
-            
-            <div class="date-content" id="date-text"></div>
-            <span id="status" class="status-badge"></span>
-
-            <div class="action-buttons">
-                <button class="done-btn" onclick="markDone()">✅ עשינו את זה!</button>
-                <button class="maybe-btn" onclick="markMaybe()">🤔 מתלבטים...</button>
-            </div>
-            
-            <button onclick="goBack()" style="margin-top: 20px; background: none; color: #aaa;">חזרה לתפריט</button>
-        </div>
-
-        <button class="reset-btn" onclick="resetAll()">🔄 איפוס הכל מחדש</button>
+    <div class="menu" id="main-menu">
+        <div class="card-select home-bg" onclick="initGame('home')">🏠<br>בבית</div>
+        <div class="card-select out-bg" onclick="initGame('out')">🌳<br>בחוץ</div>
     </div>
 
+    <div id="game-area">
+        <div class="date-card" id="card-text">לחצו כדי להתחיל!</div>
+        
+        <div>
+            <button class="btn btn-next" onclick="changeDate(-1)">➡️</button>
+            <button class="btn btn-next" onclick="changeDate(1)">⬅️</button>
+        </div>
+
+        <div style="margin-top: 15px;">
+            <button class="btn btn-done" onclick="action('done', '💖')">עשינו את זה!</button>
+            <button class="btn btn-maybe" onclick="action('maybe', '🤔')">מתלבטים...</button>
+        </div>
+
+        <button class="btn btn-list" onclick="toggleMaybeList()">📋 רשימת ההתלבטויות שלנו</button>
+        <br>
+        <button onclick="goHome()" style="background:none; border:none; color:#aaa; cursor:pointer; margin-top:15px;">🔙 חזרה לתפריט</button>
+    </div>
+
+    <div id="maybe-list">
+        <h2>ההתלבטויות שלנו 🤔</h2>
+        <ul id="list-items"></ul>
+        <button class="btn" onclick="toggleMaybeList()" style="background:#444; color:white;">סגור</button>
+    </div>
+
+    <button onclick="resetApp()" style="margin-top: 40px; border:none; background:none; color:#ccc; cursor:pointer;">🔄 איפוס כל הדף מחדש</button>
+
     <script>
-        // מאגר דייטים - כאן אפשר להוסיף עוד המון רעיונות!
-        const database = {
+        const dates = {
             home: [
-                { id: 1, text: "תחרות בישול של מנה מ-3 מרכיבים בלבד 🍳", done: false, maybe: false },
-                { id: 2, text: "ערב סרטים נוסטלגיים מהילדות עם פופקורן 🍿", done: false, maybe: false },
-                { id: 3, text: "בניית 'מבצר' משמיכות וכריות בסלון 🏰", done: false, maybe: false },
-                { id: 4, text: "משחק קופסה תחרותי עם פרס למנצח 🎲", done: false, maybe: false }
+                "מרתון סרטי דיסני עם פיצה תוצרת בית 🍕",
+                "ערב טעימות עיוורות של שוקולדים 🍫",
+                "בניית פאזל 1000 חלקים ביחד 🧩",
+                "תחרות 'מאסטר שף' - כל אחד מבשל מנה לשני 👨‍🍳",
+                "ערב קריוקי בסלון עם מיקרופון דמיוני 🎤",
+                "בניית רשימת יעדים לטיול הבא בחו\"ל ✈️",
+                "ספא ביתי עם מסכות פנים ועיסוי כפות רגליים 💆‍♀️",
+                "ערב משחקי קופסה של פעם 🎲",
+                "ללמוד ריקוד חדש מיוטיוב בסלון 💃",
+                "ערב קוקטיילים - כל אחד ממציא משקה על שם השני 🍹"
             ],
             out: [
-                { id: 101, text: "פיקניק לילי בפארק עם יין וגבינות 🍷", done: false, maybe: false },
-                { id: 102, text: "טיול בנמל בשקיעה עם גלידה 🍦", done: false, maybe: false },
-                { id: 103, text: "סדנת קרמיקה או ציור זוגית 🎨", done: false, maybe: false },
-                { id: 104, text: "ביקור במקום שמעולם לא הייתם בו בעיר 📍", done: false, maybe: false }
+                "פיקניק לילי מול הים עם שמיכה ויין 🍷",
+                "טיול בוקר בשוק מחנה יהודה או שוק הכרמל 🍓",
+                "סדנת יצירה זוגית (נגרות/קרמיקה/ציור) 🎨",
+                "ללכת לאיבוד בעיר ולעצור בבית קפה אקראי ☕",
+                "צפייה בכוכבים עם אפליקציית זיהוי מזלות ⭐",
+                "טיול אופניים במסלול חדש בטבע 🚲",
+                "ביקור במוזיאון שלא הייתם בו מעולם 🏛️",
+                "ערב סטנד-אפ או הופעה חיה 🎭",
+                "באולינג או מיני גולף תחרותי 🎳",
+                "נסיעה לילית למצפה יפה עם תרמוס תה 🍵"
             ]
         };
 
-        let currentCategory = '';
+        let currentType = '';
         let currentIndex = 0;
+        let maybeList = [];
 
-        function startDates(category) {
-            currentCategory = category;
+        function initGame(type) {
+            currentType = type;
             currentIndex = 0;
             document.getElementById('main-menu').style.display = 'none';
-            document.getElementById('date-display').style.display = 'block';
-            updateDisplay();
-            showEmojiAnimation('✨');
+            document.getElementById('game-area').style.display = 'block';
+            updateCard();
+            spawnEmojis('✨');
         }
 
-        function updateDisplay() {
-            const date = database[currentCategory][currentIndex];
-            document.getElementById('date-text').innerText = date.text;
-            
-            let statusText = '';
-            if (date.done) statusText = '✅ כבר עשינו את זה!';
-            else if (date.maybe) statusText = '🤔 סימנו כהתלבטות';
-            document.getElementById('status').innerText = statusText;
+        function updateCard() {
+            document.getElementById('card-text').innerText = dates[currentType][currentIndex];
         }
 
-        function nextDate() {
-            if (currentIndex < database[currentCategory].length - 1) {
-                currentIndex++;
-                updateDisplay();
+        function changeDate(step) {
+            currentIndex += step;
+            if (currentIndex < 0) currentIndex = dates[currentType].length - 1;
+            if (currentIndex >= dates[currentType].length) currentIndex = 0;
+            updateCard();
+            spawnEmojis('🃏');
+        }
+
+        function action(type, emoji) {
+            spawnEmojis(emoji);
+            if (type === 'maybe') {
+                const currentText = dates[currentType][currentIndex];
+                if (!maybeList.includes(currentText)) {
+                    maybeList.push(currentText);
+                    updateMaybeUI();
+                }
+                alert("התווסף לרשימת ההתלבטויות! 🤔");
+            } else {
+                alert("איזה כיף! דייט מוצלח לכם! ❤️");
             }
         }
 
-        function prevDate() {
-            if (currentIndex > 0) {
-                currentIndex--;
-                updateDisplay();
-            }
+        function updateMaybeUI() {
+            const list = document.getElementById('list-items');
+            list.innerHTML = maybeList.map(item => `<li>${item}</li>`).join('');
         }
 
-        function markDone() {
-            database[currentCategory][currentIndex].done = true;
-            showEmojiAnimation('🎉');
-            updateDisplay();
+        function toggleMaybeList() {
+            const el = document.getElementById('maybe-list');
+            el.style.display = el.style.display === 'block' ? 'none' : 'block';
         }
 
-        function markMaybe() {
-            database[currentCategory][currentIndex].maybe = true;
-            showEmojiAnimation('💭');
-            updateDisplay();
-        }
-
-        function goBack() {
+        function goHome() {
             document.getElementById('main-menu').style.display = 'flex';
-            document.getElementById('date-display').style.display = 'none';
+            document.getElementById('game-area').style.display = 'none';
         }
 
-        function resetAll() {
-            if(confirm("בטוחה שאת רוצה לאפס את כל ההתקדמות?")) {
-                location.reload();
+        function resetApp() {
+            if(confirm("לאפס הכל מחדש?")) location.reload();
+        }
+
+        function spawnEmojis(emoji) {
+            for(let i=0; i<10; i++) {
+                const el = document.createElement('div');
+                el.className = 'emoji-fly';
+                el.innerText = emoji;
+                el.style.left = Math.random() * 100 + 'vw';
+                el.style.bottom = '0';
+                document.body.appendChild(el);
+                setTimeout(() => el.remove(), 1500);
             }
-        }
-
-        function showEmojiAnimation(emoji) {
-            const div = document.createElement('div');
-            div.innerText = emoji;
-            div.style.position = 'fixed';
-            div.style.left = Math.random() * 80 + 10 + '%';
-            div.style.top = '100%';
-            div.style.fontSize = '3rem';
-            div.style.transition = 'all 2s';
-            div.style.zIndex = '1000';
-            document.body.appendChild(div);
-            
-            setTimeout(() => {
-                div.style.top = '-10%';
-                div.style.opacity = '0';
-            }, 100);
-            
-            setTimeout(() => div.remove(), 2000);
         }
     </script>
 </body>
