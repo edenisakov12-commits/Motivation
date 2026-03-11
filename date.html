@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>דייט-נוס: רעיונות שתמיד מתחדשים</title>
+    <style>
+        :root {
+            --home-color: #fce4ec;
+            --out-color: #e3f2fd;
+            --text-color: #4a4a4a;
+        }
+
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background: #fffafa; 
+            margin: 0; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh;
+            color: var(--text-color);
+        }
+
+        .container { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+
+        .choice-card {
+            width: 150px; height: 150px; border-radius: 25px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            cursor: pointer; transition: 0.3s; box-shadow: 0 8px 15px rgba(0,0,0,0.05);
+            border: 2px solid white;
+        }
+
+        .home-card { background-color: var(--home-color); }
+        .out-card { background-color: var(--out-color); }
+        .choice-card:active { transform: scale(0.9); }
+
+        #result-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.98); z-index: 100;
+            flex-direction: column; align-items: center; justify-content: center; text-align: center;
+        }
+
+        .idea-box {
+            padding: 40px; border-radius: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 400px; border: 2px solid #eee;
+        }
+
+        .counter { margin-top: 20px; font-size: 0.9rem; color: #888; }
+        
+        button {
+            background: #d81b60; color: white; border: none;
+            padding: 12px 30px; border-radius: 50px; cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>זמן איכות ❤️</h1>
+    <p>רעיונות שלא יחזרו על עצמם!</p>
+
+    <div class="container">
+        <div class="choice-card home-card" onclick="pickDate('home')">
+            <span style="font-size: 3rem;">🏠</span>
+            <span style="font-weight: bold;">בבית</span>
+        </div>
+        <div class="choice-card out-card" onclick="pickDate('out')">
+            <span style="font-size: 3rem;">✨</span>
+            <span style="font-weight: bold;">בחוץ</span>
+        </div>
+    </div>
+
+    <div id="result-overlay">
+        <div class="idea-box">
+            <div id="emoji-result" style="font-size: 4rem;"></div>
+            <div id="idea-result" style="font-size: 1.5rem; margin: 20px 0;"></div>
+            <button onclick="closeOverlay()">איזה יופי!</button>
+        </div>
+    </div>
+
+    <div class="counter" id="counter-display">טוען נתונים...</div>
+
+    <script>
+        // מאגר ענק של רעיונות (אפשר להוסיף כאן עוד מאות)
+        const masterList = {
+            home: [
+                { text: "ערב טעימות גלידה - קונים 4 סוגים ומדרגים", emoji: "🍦" },
+                { text: "בניית מבצר משמיכות בסלון וצפייה בסרט", emoji: "🏰" },
+                { text: "ערב 'זיכרונות' - סידור אלבום תמונות דיגיטלי", emoji: "📸" },
+                { text: "למידת קסם חדש ביוטיוב והצגה אחד לשני", emoji: "🪄" },
+                { text: "ערב סושי ביתי - מנסים לגלגל יחד", emoji: "🍣" },
+                { text: "פונדו שוקולד עם פירות חתוכים", emoji: "🍓" }
+            ],
+            out: [
+                { text: "נסיעה לילית לכותל או למקום רוחני/שקט", emoji: "🕯️" },
+                { text: "סדנת ירי בחץ וקשת או זריקת גרזנים", emoji: "🎯" },
+                { text: "סיבוב בשוק בשעות הערב המאוחרות", emoji: "🥙" },
+                { text: "ישיבה בחוף הים עם קפה בתרמוס", emoji: "☕" },
+                { text: "הופעת סטנד-אפ מקומית", emoji: "🎤" },
+                { text: "ביקור בחנות ספרים וקניית ספר אחד לשני", emoji: "📚" }
+            ]
+        };
+
+        // פונקציה לניהול הזיכרון
+        function getAvailableIdeas(type) {
+            let used = JSON.parse(localStorage.getItem('used_' + type)) || [];
+            let available = masterList[type].filter(idea => !used.includes(idea.text));
+            
+            if (available.length === 0) {
+                // אם נגמרו הרעיונות, מאפסים את הרשימה
+                localStorage.setItem('used_' + type, JSON.stringify([]));
+                return masterList[type];
+            }
+            return available;
+        }
+
+        function pickDate(type) {
+            let available = getAvailableIdeas(type);
+            let randomIndex = Math.floor(Math.random() * available.length);
+            let chosen = available[randomIndex];
+
+            // שמירה בזיכרון שהשתמשנו ברעיון הזה
+            let used = JSON.parse(localStorage.getItem('used_' + type)) || [];
+            used.push(chosen.text);
+            localStorage.setItem('used_' + type, JSON.stringify(used));
+
+            // הצגת התוצאה
+            document.getElementById('idea-result').innerText = chosen.text;
+            document.getElementById('emoji-result').innerText = chosen.emoji;
+            document.getElementById('result-overlay').style.display = 'flex';
+            updateCounter();
+        }
+
+        function updateCounter() {
+            let homeLeft = getAvailableIdeas('home').length;
+            let outLeft = getAvailableIdeas('out').length;
+            document.getElementById('counter-display').innerText = 
+                `נשארו עוד ${homeLeft} רעיונות לבית ו-${outLeft} לחוץ לפני שנתחיל מהתחלה!`;
+        }
+
+        function closeOverlay() {
+            document.getElementById('result-overlay').style.display = 'none';
+        }
+
+        // עדכון מונה בטעינה
+        updateCounter();
+    </script>
+</body>
+</html>
