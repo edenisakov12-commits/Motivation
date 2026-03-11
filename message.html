@@ -13,7 +13,7 @@
         .btn:active { transform: scale(0.9); }
         .btn span { font-size: 24px; display: block; }
         .send-btn { background: #ff69b4; color: white; width: 100%; padding: 15px; border-radius: 15px; border: none; margin-top: 10px; font-weight: bold; cursor: pointer; }
-        #status { color: #888; font-size: 12px; margin-top: 15px; }
+        #status { color: #888; font-size: 14px; margin-top: 15px; background: #eee; padding: 10px; border-radius: 10px; word-break: break-all; }
     </style>
 </head>
 <body>
@@ -23,24 +23,21 @@
     <p>מה להזכיר לירדן?</p>
     
     <div style="display: flex; flex-wrap: wrap; justify-content: center;">
-        <button class="btn" onclick="sendPush('אל תשכח מטרנה לרום! 🍼')">
+        <button class="btn" onclick="copyToken()">
+            <span>📲</span> שלב 1: העתק מפתח ירדן
+        </button>
+        <button class="btn" onclick="sendToFirebase('אל תשכח מטרנה לרום! 🍼')">
             <span>🍼</span> מטרנה לרום
         </button>
-        <button class="btn" onclick="sendPush('צריך לקנות חלב 🥛')">
+        <button class="btn" onclick="sendToFirebase('צריך לקנות חלב 🥛')">
             <span>🥛</span> להביא חלב
         </button>
-        <button class="btn" onclick="sendPush('אוהבת אותך! ❤️')">
-            <span>💖</span> רק לומר שאוהבת
-        </button>
-        <button class="btn" onclick="sendPush('מה אוכלים הערב? 🍕')">
-            <span>🍕</span> אני רעבה...
+        <button class="btn" onclick="sendToFirebase('אוהבת אותך! ❤️')">
+            <span>💖</span> הודעת אהבה
         </button>
     </div>
-
-    <input type="text" id="freeText" style="width: 90%; padding: 10px; margin-top: 15px; border-radius: 10px; border: 1px solid #ddd;" placeholder="הודעה אחרת...">
-    <button class="send-btn" onclick="sendCustom()">שלחי עכשיו 🚀</button>
     
-    <p id="status">טוען מערכת התראות...</p>
+    <p id="status">טוען מערכת... אנא אשרי התראות אם תתבקשי</p>
 </div>
 
 <script>
@@ -56,27 +53,28 @@
     firebase.initializeApp(firebaseConfig);
     const messaging = firebase.messaging();
 
-    // בקשת אישור להתראות
-    messaging.requestPermission()
-        .then(() => messaging.getToken())
-        .then(token => {
-            console.log("Token:", token);
-            document.getElementById('status').innerText = "מערכת מוכנה! ✅";
-        })
-        .catch(err => {
-            document.getElementById('status').innerText = "חובה לאשר התראות בדפדפן 🔔";
+    // רישום לקבלת התראות
+    messaging.getToken({ vapidKey: 'NH9xnzPfdIK_QLxKGmX9ErMYzDIBuAIzK2crtUEhmTU' })
+        .then((currentToken) => {
+            if (currentToken) {
+                document.getElementById('status').innerText = "המפתח שלך מוכן! שלחי אותו לירדן כדי שיוכל לשלוח לך הודעות.";
+                window.myToken = currentToken;
+            } else {
+                document.getElementById('status').innerText = "לא התקבל מפתח. בדקי הרשאות.";
+            }
+        }).catch((err) => {
+            document.getElementById('status').innerText = "שגיאה: " + err;
         });
 
-    function sendPush(messageText) {
-        document.getElementById('status').innerText = "שולח: " + messageText;
-        // כאן אנחנו משתמשים בשרת של Firebase לשלוח את ההודעה
-        // הערה: שליחה ישירה מהדפדפן דורשת שרת קטן, נשתמש כרגע ב-Console לבדיקה
-        alert("הודעה נשלחה: " + messageText);
+    function copyToken() {
+        if(window.myToken) {
+            navigator.clipboard.writeText(window.myToken);
+            alert("המפתח הועתק! שלחי אותו לירדן בוואטסאפ.");
+        }
     }
 
-    function sendCustom() {
-        const val = document.getElementById('freeText').value;
-        if(val) sendPush(val);
+    function sendToFirebase(msg) {
+        alert("כדי לשלוח את ההודעה: '" + msg + "' באמת, נשתמש במערכת השליחה של Firebase שבנינו.");
     }
 </script>
 </body>
