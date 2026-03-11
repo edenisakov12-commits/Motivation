@@ -17,7 +17,7 @@ messaging.onBackgroundMessage((payload) => {
     const notificationTitle = payload.notification.title;
     const notificationOptions = {
         body: payload.notification.body,
-        icon: 'https://cdn-icons-png.flaticon.com/512/3022/3022215.png' // אייקון חמוד של בקבוק
+        icon: 'https://cdn-icons-png.flaticon.com/512/3022/3022215.png'
     };
     self.registration.showNotification(notificationTitle, notificationOptions);
 });
