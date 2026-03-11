@@ -6,46 +6,57 @@
     <title>הדייטים של עדן וירדן ❤️</title>
     <style>
         :root {
-            --eden-color: #ffafbd;
-            --yarden-color: #ffc3a0;
+            --eden-pink: #ffafbd;
+            --yarden-orange: #ffc3a0;
             --accent: #ff4b2b;
+            --success: #4caf50;
         }
         body { 
-            font-family: 'Segoe UI', Tahoma, sans-serif; 
-            background: linear-gradient(to bottom, #ffafbd, #ffc3a0); 
-            margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh;
-            color: #444;
+            font-family: 'Segoe UI', sans-serif; 
+            background: linear-gradient(135deg, var(--eden-pink), var(--yarden-orange)); 
+            margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh;
         }
         .main-card {
-            background: rgba(255, 255, 255, 0.9); padding: 30px; border-radius: 40px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1); text-align: center; width: 90%; max-width: 400px;
+            background: rgba(255, 255, 255, 0.95); padding: 25px; border-radius: 35px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1); text-align: center; width: 100%; max-width: 400px;
         }
-        h1 { font-size: 1.8rem; color: #ff4b2b; margin-bottom: 10px; }
-        .names { font-weight: bold; font-size: 1.2rem; margin-bottom: 20px; color: #666; }
+        h1 { color: var(--accent); margin-bottom: 5px; font-size: 1.6rem; }
+        .names { font-weight: bold; color: #777; margin-bottom: 20px; }
         
-        .game-buttons { display: flex; gap: 15px; justify-content: center; margin-top: 20px; }
+        .game-buttons { display: flex; gap: 15px; margin-bottom: 20px; }
         .choice-btn {
-            flex: 1; padding: 20px; border-radius: 25px; border: none; cursor: pointer;
-            font-weight: bold; transition: 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            display: flex; flex-direction: column; align-items: center; gap: 10px;
+            flex: 1; padding: 15px; border-radius: 20px; border: none; cursor: pointer;
+            transition: 0.3s; box-shadow: 0 5px 10px rgba(0,0,0,0.05);
+            display: flex; flex-direction: column; align-items: center; font-weight: bold;
         }
         .btn-home { background: #fff0f6; color: #d81b60; }
         .btn-out { background: #e6f7ff; color: #0077b6; }
-        .choice-btn:active { transform: scale(0.9); }
 
-        /* חלונית התוצאה */
+        /* חלונית תוצאה */
         #modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;
+            background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center;
         }
         .modal-content {
-            background: white; padding: 30px; border-radius: 35px; width: 85%; max-width: 350px;
-            text-align: center; position: relative; animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: white; padding: 30px; border-radius: 30px; width: 85%; max-width: 350px; text-align: center;
         }
-        @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .action-btn {
+            width: 100%; padding: 12px; margin: 5px 0; border-radius: 50px; border: none; font-weight: bold; cursor: pointer;
+        }
+        .wish-btn { background: #fff3e0; color: #ef6c00; }
+        .done-btn { background: var(--success); color: white; }
         
-        .share-wa { background: #25D366; color: white; padding: 10px 20px; border-radius: 50px; text-decoration: none; display: inline-block; margin-top: 15px; font-weight: bold; }
-        .reset-link { margin-top: 25px; font-size: 0.8rem; color: #999; cursor: pointer; border: none; background: none; text-decoration: underline; }
+        /* רשימת התלבטויות */
+        .list-section {
+            width: 100%; max-width: 400px; margin-top: 25px; background: white; border-radius: 20px; padding: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        .list-item {
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 10px; border-bottom: 1px solid #eee; font-size: 0.9rem;
+        }
+        .done-tick { color: var(--success); cursor: pointer; font-size: 1.2rem; }
     </style>
 </head>
 <body>
@@ -53,88 +64,114 @@
     <div class="main-card">
         <h1>הדייטים שלנו ❤️</h1>
         <div class="names">עדן & ירדן</div>
-        <p>מה נעשה הפעם? בחרו אווירה:</p>
         
         <div class="game-buttons">
-            <button class="choice-btn btn-home" onclick="pick('home')">
-                <span style="font-size: 2.5rem;">🏠</span>
-                <span>בבית</span>
-            </button>
-            <button class="choice-btn btn-out" onclick="pick('out')">
-                <span style="font-size: 2.5rem;">✨</span>
-                <span>בחוץ</span>
-            </button>
+            <button class="choice-btn btn-home" onclick="pick('home')"><span>🏠</span>בבית</button>
+            <button class="choice-btn btn-out" onclick="pick('out')"><span>🚗</span>בחוץ</button>
         </div>
 
-        <div id="stats" style="margin-top: 20px; font-size: 0.9rem; color: #888;"></div>
-        <button class="reset-link" onclick="resetAll()">איפוס נתונים</button>
+        <div id="counter-display" style="font-weight: bold; color: var(--accent);">
+            דייטים שעשינו: 0
+        </div>
+    </div>
+
+    <div class="list-section" id="wishlist-container" style="display:none;">
+        <h3 style="margin-top:0; font-size: 1rem; color: #555;">🤔 מתלבטים לגבי:</h3>
+        <div id="wishlist-items"></div>
     </div>
 
     <div id="modal">
         <div class="modal-content">
-            <div id="res-emoji" style="font-size: 4rem;"></div>
-            <h2 id="res-title" style="color: #333; margin: 15px 0;"></h2>
-            <div id="res-desc" style="color: #666; margin-bottom: 20px;"></div>
+            <div id="res-emoji" style="font-size: 3.5rem;"></div>
+            <h2 id="res-title" style="margin: 10px 0;"></h2>
+            <p id="res-desc" style="color: #666; font-size: 0.9rem;"></p>
             
-            <a id="wa-link" href="#" target="_blank" class="share-wa">שלחי לירדן בוואטסאפ 📱</a>
-            <br>
-            <button onclick="closeModal()" style="margin-top: 15px; border: none; background: #eee; padding: 8px 20px; border-radius: 20px; cursor: pointer;">סגור</button>
+            <button class="action-btn wish-btn" onclick="addToWishlist()">✨ שמור להתלבטות</button>
+            <button class="action-btn done-btn" onclick="markAsDoneCurrent()">✅ עשינו את זה!</button>
+            <button onclick="closeModal()" style="background:none; border:none; color:#999; margin-top:10px; cursor:pointer;">סגור</button>
         </div>
     </div>
 
     <script>
         const database = {
             home: [
-                {t: "ערב סרט ופיצה", d: "עדן וירדן בערב של שקט, פיצה חמה וסרט טוב מתחת לשמיכה", e: "🍕"},
-                {t: "תחרות מאסטר-שף", d: "מבשלים משהו משוגע ממה שיש במקרר ומחליטים מי השף המנצח", e: "👨‍🍳"},
-                {t: "ערב משחקי קופסה", d: "מוציאים את הטאקי או המונופול ותחרות עד הסוף!", e: "🎲"},
-                {t: "ספא ביתי מפנק", d: "נרות, מוזיקה רגועה ומסאז' אחד לשנייה אחרי יום ארוך", e: "🕯️"},
-                {t: "ערב קוקטיילים", d: "מנסים להכין משקאות צבעוניים ממה שיש בארון המשקאות", e: "🍸"}
+                {t: "ערב שוקולד ויין", d: "טעימות עיוורות של שוקולדים שונים עם יין טוב", e: "🍷"},
+                {t: "בניית מבצר בסלון", d: "כמו פעם - שמיכות, כריות וסרט בתוך המבצר", e: "🏰"},
+                {t: "סדנת מסאז' זוגית", d: "לומדים טכניקות חדשות אחד על השנייה", e: "💆‍♂️"},
+                {t: "ערב אלבומי תמונות", d: "עוברים על תמונות מהילדות ומהחתונה", e: "📸"}
             ],
             out: [
-                {t: "דייט גלידה", d: "יוצאים לסיבוב קצר, אוכלים גלידה ומדברים על הכל חוץ מעבודה וילדים", e: "🍦"},
-                {t: "ערב סטנד-אפ", d: "יוצאים לצחוק קצת מהלב ולשכוח מהכל", e: "🎤"},
-                {t: "מסעדה חדשה", d: "הולכים למקום שמעולם לא הייתם בו ומזמינים משהו מוזר", e: "🍽️"},
-                {t: "טיול לילי בים", d: "הליכה עם רגליים בחול וקפה בתרמוס מול הגלים", e: "🌊"},
-                {t: "סרט ב-VIP", d: "כי מגיע לכם להתפנק בכורסאות נוחות עם פופקורן", e: "🎟️"}
+                {t: "הופעת סטנד-אפ", d: "יוצאים לצחוק יחד על כל הצרות", e: "🎤"},
+                {t: "פיקניק שקיעה", d: "קפה ומאפה מול הים בשעה הכי יפה", e: "🌅"},
+                {t: "באולינג תחרותי", d: "המנצח מקבל פטור משטיפת כלים שבוע!", e: "🎳"},
+                {t: "דייט גלידה", d: "סיבוב לילי עם גלידה מושחתת", e: "🍦"}
             ]
         };
 
-        let stats = JSON.parse(localStorage.getItem('eden_yarden_stats')) || { home: 0, out: 0 };
+        let currentIdea = null;
+        let doneCount = parseInt(localStorage.getItem('dates_done_count')) || 0;
+        let wishlist = JSON.parse(localStorage.getItem('dates_wishlist')) || [];
 
         function pick(type) {
             const list = database[type];
-            const idea = list[Math.floor(Math.random() * list.length)];
+            currentIdea = list[Math.floor(Math.random() * list.length)];
             
-            document.getElementById('res-emoji').innerText = idea.e;
-            document.getElementById('res-title').innerText = idea.t;
-            document.getElementById('res-desc').innerText = idea.d;
-            
-            // הכנת לינק לוואטסאפ
-            const waText = encodeURIComponent(`היי ירדן, יצא לנו דייט! ${idea.e}\n${idea.t}: ${idea.d}`);
-            document.getElementById('wa-link').href = `https://wa.me/?text=${waText}`;
-            
-            stats[type]++;
-            localStorage.setItem('eden_yarden_stats', JSON.stringify(stats));
-            updateStats();
+            document.getElementById('res-emoji').innerText = currentIdea.e;
+            document.getElementById('res-title').innerText = currentIdea.t;
+            document.getElementById('res-desc').innerText = currentIdea.d;
             document.getElementById('modal').style.display = 'flex';
         }
 
-        function updateStats() {
-            document.getElementById('stats').innerText = `צברנו יחד: ${stats.home + stats.out} דייטים!`;
+        function addToWishlist() {
+            if (!wishlist.find(i => i.t === currentIdea.t)) {
+                wishlist.push(currentIdea);
+                saveAndRefresh();
+            }
+            closeModal();
+        }
+
+        function markAsDoneCurrent() {
+            doneCount++;
+            saveAndRefresh();
+            closeModal();
+        }
+
+        function markAsDoneFromList(index) {
+            wishlist.splice(index, 1);
+            doneCount++;
+            saveAndRefresh();
+        }
+
+        function saveAndRefresh() {
+            localStorage.setItem('dates_done_count', doneCount);
+            localStorage.setItem('dates_wishlist', JSON.stringify(wishlist));
+            render();
+        }
+
+        function render() {
+            document.getElementById('counter-display').innerText = `דייטים שעשינו: ${doneCount}`;
+            const listDiv = document.getElementById('wishlist-items');
+            const container = document.getElementById('wishlist-container');
+            
+            listDiv.innerHTML = "";
+            if (wishlist.length > 0) {
+                container.style.display = 'block';
+                wishlist.forEach((item, index) => {
+                    listDiv.innerHTML += `
+                        <div class="list-item">
+                            <span>${item.e} ${item.t}</span>
+                            <span class="done-tick" onclick="markAsDoneFromList(${index})">✅</span>
+                        </div>
+                    `;
+                });
+            } else {
+                container.style.display = 'none';
+            }
         }
 
         function closeModal() { document.getElementById('modal').style.display = 'none'; }
         
-        function resetAll() {
-            if(confirm("לאפס את המונה?")) {
-                stats = { home: 0, out: 0 };
-                localStorage.removeItem('eden_yarden_stats');
-                updateStats();
-            }
-        }
-
-        updateStats();
+        render();
     </script>
 </body>
 </html>
