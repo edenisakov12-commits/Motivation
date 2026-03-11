@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>עדן & ירדן - הודעות מהלב 💖</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+        }
+        h1 { color: #ff4b2b; margin-bottom: 10px; }
+        .emoji-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .btn {
+            background: white;
+            border: 2px solid #ff4b2b;
+            border-radius: 15px;
+            padding: 15px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .btn:active { transform: scale(0.95); }
+        .btn span { font-size: 30px; margin-bottom: 5px; }
+        .custom-msg {
+            margin-top: 20px;
+            width: 90%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+        #status { margin-top: 15px; font-size: 14px; color: #555; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>היי עדן! ✨</h1>
+    <p>מה נשלח לירדן היום?</p>
+    
+    <div class="emoji-grid">
+        <button class="btn" onclick="sendMsg('אל תשכח חלב בדרך הביתה! 🥛')">
+            <span>🥛</span> להביא חלב
+        </button>
+        <button class="btn" onclick="sendMsg('צריך מטען לרום המתוק 🔌')">
+            <span>👶</span> מטען לרום
+        </button>
+        <button class="btn" onclick="sendMsg('אוהבת אותך המון! ❤️')">
+            <span>💖</span> מסר של אהבה
+        </button>
+        <button class="btn" onclick="sendMsg('מה עם ארוחת ערב? 🍕')">
+            <span>🍕</span> רעבה...
+        </button>
+    </div>
+
+    <input type="text" id="freeText" class="custom-msg" placeholder="כתבי הודעה חופשית...">
+    <button class="btn" style="width: 100%; margin-top: 10px; background: #ff4b2b; color: white;" onclick="sendCustom()">שלחי הודעה 🚀</button>
+    
+    <p id="status">ממתין לפעולה...</p>
+</div>
+
+<script>
+    function sendMsg(text) {
+        document.getElementById('status').innerText = "שולח לירדן: " + text;
+        // כאן יבוא הקוד שיחבר ל-Firebase בהמשך
+        alert("הודעה נשלחה בהצלחה! (כרגע זו רק הדמיה)");
+    }
+
+    function sendCustom() {
+        const val = document.getElementById('freeText').value;
+        if(val) sendMsg(val);
+    }
+</script>
+
+</body>
+</html>
