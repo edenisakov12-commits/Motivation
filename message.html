@@ -3,41 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>עדן & ירדן - הבית שלנו 💖</title>
-    
+    <title>עדן & ירדן 💖</title>
     <link rel="manifest" href="manifest.json">
-    
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-messaging-compat.js"></script>
-    
     <style>
-        body { font-family: -apple-system, system-ui, sans-serif; background: #fff0f5; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        body { font-family: -apple-system, sans-serif; background: #fff0f5; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
         .container { background: white; padding: 30px; border-radius: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 85%; max-width: 350px; text-align: center; }
-        h1 { color: #ff69b4; font-size: 24px; margin-bottom: 20px; }
-        .btn { background: #fff; border: 2px solid #ff69b4; border-radius: 20px; padding: 20px; margin: 10px 0; cursor: pointer; width: 100%; font-size: 18px; font-weight: bold; color: #ff69b4; transition: 0.3s; box-sizing: border-box; }
-        .btn:active { background: #ff69b4; color: white; transform: scale(0.95); }
-        .status-box { margin-top: 20px; padding: 15px; border-radius: 15px; font-size: 13px; background: #f8f8f8; color: #666; word-break: break-all; min-height: 40px; }
-        .setup-btn { background: #ff69b4; color: white; border: none; padding: 15px; border-radius: 15px; width: 100%; cursor: pointer; font-weight: bold; font-size: 16px; box-shadow: 0 4px 10px rgba(255, 105, 180, 0.3); }
+        .setup-btn { background: #ff69b4; color: white; border: none; padding: 15px; border-radius: 15px; width: 100%; font-weight: bold; cursor: pointer; font-size: 16px; }
+        #status { margin-top: 20px; font-size: 14px; color: #666; word-break: break-all; padding: 10px; background: #f9f9f9; border-radius: 10px; min-height: 50px; }
     </style>
 </head>
 <body>
-
-<div class="container">
-    <h1>היי ❤️</h1>
-    
-    <div id="main-ui" style="display: none;">
-        <button class="btn" onclick="sendToPartner('אל תשכח מטרנה לרום! 🍼')">🍼 מטרנה לרום</button>
-        <button class="btn" onclick="sendToPartner('אוהבת אותך! ❤️')">❤️ הודעת אהבה</button>
-        <button class="btn" onclick="sendToPartner('צריך לקנות חלב 🥛')">🥛 להביא חלב</button>
+    <div class="container">
+        <h1>היי ❤️</h1>
+        <div id="setup-ui">
+            <p>צעד אחרון למפתח:</p>
+            <button class="setup-btn" onclick="initNotifications()">לחצי כאן לאישור 🔔</button>
+        </div>
+        <div id="status">טוען מערכת...</div>
     </div>
-
-    <div id="setup-ui">
-        <p>כדי שההודעות יקפצו בטלפון:</p>
-        <button class="setup-btn" onclick="initNotifications()">לחצי כאן לאישור 🔔</button>
-    </div>
-
-    <div id="status" class="status-box">ממתין לפעולה...</div>
-</div>
 
 <script>
     const firebaseConfig = {
@@ -48,31 +33,28 @@
         messagingSenderId: "712427275013",
         appId: "1:712427275013:web:a6a579f958815690b86d6c"
     };
-
     firebase.initializeApp(firebaseConfig);
     const messaging = firebase.messaging();
 
     async function initNotifications() {
+        if (!('Notification' in window)) {
+            document.getElementById('status').innerHTML = "<b>שימי לב:</b> באייפון חייבים ללחוץ על 'שתף' ואז 'הוסף למסך הבית' כדי שזה יעבוד.";
+            return;
+        }
         try {
             const permission = await Notification.requestPermission();
             if (permission === 'granted') {
                 const token = await messaging.getToken({ vapidKey: 'NH9xnzPfdIK_QLxKGmX9ErMYzDIBuAIzK2crtUEhmTU' });
-                if (token) {
-                    document.getElementById('status').innerText = "✅ הצלחת! המפתח שלך: " + token;
-                    document.getElementById('setup-ui').style.display = 'none';
-                    document.getElementById('main-ui').style.display = 'block';
-                }
+                document.getElementById('status').innerText = "✅ המפתח שלך: " + token;
+                document.getElementById('setup-ui').style.display = 'none';
             } else {
-                document.getElementById('status').innerText = "ההתראות חסומות. כנסי להגדרות > התראות > ואשרי לאפליקציה.";
+                document.getElementById('status').innerText = "ההתראות חסומות בהגדרות המכשיר.";
             }
-        } catch (error) {
-            document.getElementById('status').innerText = "שגיאה: " + error.message;
+        } catch (e) {
+            document.getElementById('status').innerText = "שגיאה: " + e.message;
         }
     }
-
-    function sendToPartner(msg) {
-        alert("הודעה נשלחה בבדיקה: " + msg);
-    }
+    document.getElementById('status').innerText = "המערכת מוכנה. אם את במסך הבית - לחצי על הכפתור.";
 </script>
 </body>
 </html>
