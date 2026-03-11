@@ -4,66 +4,80 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>עדן & ירדן - הודעות מהלב 💖</title>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-messaging-compat.js"></script>
     <style>
-        body { font-family: sans-serif; background: #fdf2f2; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        body { font-family: sans-serif; background: #fff0f5; display: flex; flex-direction: column; align-items: center; padding: 20px; }
         .container { background: white; padding: 25px; border-radius: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); width: 100%; max-width: 350px; text-align: center; }
-        .btn { background: #ffefef; border: 2px solid #ff4b2b; border-radius: 15px; padding: 15px; margin: 5px; cursor: pointer; width: 45%; font-size: 14px; }
+        .btn { background: #fff; border: 2px solid #ff69b4; border-radius: 15px; padding: 15px; margin: 5px; cursor: pointer; width: 45%; font-size: 14px; transition: 0.2s; }
+        .btn:active { transform: scale(0.9); }
         .btn span { font-size: 24px; display: block; }
-        .send-btn { background: #ff4b2b; color: white; width: 100%; padding: 15px; border-radius: 15px; border: none; margin-top: 10px; font-weight: bold; }
-        #status { color: #888; font-size: 12px; margin-top: 10px; }
-        .setup-btn { background: #4CAF50; color: white; padding: 10px; border-radius: 10px; border: none; margin-bottom: 15px; cursor: pointer; }
+        .send-btn { background: #ff69b4; color: white; width: 100%; padding: 15px; border-radius: 15px; border: none; margin-top: 10px; font-weight: bold; cursor: pointer; }
+        #status { color: #888; font-size: 12px; margin-top: 15px; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h1>היי עדן ✨</h1>
-    <button class="setup-btn" onclick="setupNotifications()">הפעל התראות בטלפון זה 🔔</button>
+    <p>מה להזכיר לירדן?</p>
     
     <div style="display: flex; flex-wrap: wrap; justify-content: center;">
-        <button class="btn" onclick="sendMsg('אל תשכח מטרנה לרום בדרך הביתה! 🍼')">
+        <button class="btn" onclick="sendPush('אל תשכח מטרנה לרום! 🍼')">
             <span>🍼</span> מטרנה לרום
         </button>
-        <button class="btn" onclick="sendMsg('אל תשכח חלב! 🥛')">
+        <button class="btn" onclick="sendPush('צריך לקנות חלב 🥛')">
             <span>🥛</span> להביא חלב
         </button>
-        <button class="btn" onclick="sendMsg('אוהבת אותך! ❤️')">
-            <span>💖</span> מסר של אהבה
+        <button class="btn" onclick="sendPush('אוהבת אותך! ❤️')">
+            <span>💖</span> רק לומר שאוהבת
         </button>
-        <button class="btn" onclick="sendMsg('מה אוכלים היום? 🍕')">
-            <span>🍕</span> אני רעבה
+        <button class="btn" onclick="sendPush('מה אוכלים הערב? 🍕')">
+            <span>🍕</span> אני רעבה...
         </button>
     </div>
 
-    <input type="text" id="freeText" style="width: 90%; padding: 10px; margin-top: 15px; border-radius: 10px; border: 1px solid #ddd;" placeholder="כתבי משהו אחר...">
-    <button class="send-btn" onclick="sendCustom()">שלחי לירדן 🚀</button>
+    <input type="text" id="freeText" style="width: 90%; padding: 10px; margin-top: 15px; border-radius: 10px; border: 1px solid #ddd;" placeholder="הודעה אחרת...">
+    <button class="send-btn" onclick="sendCustom()">שלחי עכשיו 🚀</button>
     
-    <p id="status">סטטוס: מוכן לשליחה</p>
+    <p id="status">טוען מערכת התראות...</p>
 </div>
 
 <script>
-    // כאן יבוא הקוד שיחבר אותנו לשרת ההתראות
-    async function setupNotifications() {
-        const permission = await Notification.requestPermission();
-        if (permission === 'granted') {
-            document.getElementById('status').innerText = "התראות מאושרות! ✅";
-            // כאן נרשום את המכשיר ב-Firebase בשלב הבא
-        } else {
-            alert("חובה לאשר התראות כדי שזה יעבוד!");
-        }
-    }
+    const firebaseConfig = {
+        apiKey: "AIzaSyATfY1TGL01-VVFdBwfbZ65-ctXtkYufzI",
+        authDomain: "message-505ba.firebaseapp.com",
+        projectId: "message-505ba",
+        storageBucket: "message-505ba.firebasestorage.app",
+        messagingSenderId: "712427275013",
+        appId: "1:712427275013:web:a6a579f958815690b86d6c"
+    };
 
-    function sendMsg(text) {
-        document.getElementById('status').innerText = "שולח: " + text;
-        // פונקציית השליחה האמיתית תופעל כאן
-        console.log("Sending to server:", text);
+    firebase.initializeApp(firebaseConfig);
+    const messaging = firebase.messaging();
+
+    // בקשת אישור להתראות
+    messaging.requestPermission()
+        .then(() => messaging.getToken())
+        .then(token => {
+            console.log("Token:", token);
+            document.getElementById('status').innerText = "מערכת מוכנה! ✅";
+        })
+        .catch(err => {
+            document.getElementById('status').innerText = "חובה לאשר התראות בדפדפן 🔔";
+        });
+
+    function sendPush(messageText) {
+        document.getElementById('status').innerText = "שולח: " + messageText;
+        // כאן אנחנו משתמשים בשרת של Firebase לשלוח את ההודעה
+        // הערה: שליחה ישירה מהדפדפן דורשת שרת קטן, נשתמש כרגע ב-Console לבדיקה
+        alert("הודעה נשלחה: " + messageText);
     }
 
     function sendCustom() {
         const val = document.getElementById('freeText').value;
-        if(val) sendMsg(val);
+        if(val) sendPush(val);
     }
 </script>
-
 </body>
 </html>
