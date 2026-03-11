@@ -10,6 +10,7 @@
             --yarden-orange: #ffc3a0;
             --accent: #ff4b2b;
             --success: #4caf50;
+            --gray: #9e9e9e;
         }
         body { 
             font-family: 'Segoe UI', sans-serif; 
@@ -32,7 +33,6 @@
         .btn-home { background: #fff0f6; color: #d81b60; }
         .btn-out { background: #e6f7ff; color: #0077b6; }
 
-        /* חלונית תוצאה */
         #modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center;
@@ -41,22 +41,23 @@
             background: white; padding: 30px; border-radius: 30px; width: 85%; max-width: 350px; text-align: center;
         }
 
-        .action-btn {
-            width: 100%; padding: 12px; margin: 5px 0; border-radius: 50px; border: none; font-weight: bold; cursor: pointer;
-        }
+        .action-btn { width: 100%; padding: 12px; margin: 5px 0; border-radius: 50px; border: none; font-weight: bold; cursor: pointer; }
         .wish-btn { background: #fff3e0; color: #ef6c00; }
         .done-btn { background: var(--success); color: white; }
         
-        /* רשימת התלבטויות */
         .list-section {
             width: 100%; max-width: 400px; margin-top: 25px; background: white; border-radius: 20px; padding: 15px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
         .list-item {
             display: flex; justify-content: space-between; align-items: center; 
-            padding: 10px; border-bottom: 1px solid #eee; font-size: 0.9rem;
+            padding: 10px; border-bottom: 1px solid #f9f9f9; font-size: 0.9rem;
         }
-        .done-tick { color: var(--success); cursor: pointer; font-size: 1.2rem; }
+        .item-actions { display: flex; gap: 10px; }
+        .btn-icon { cursor: pointer; font-size: 1.1rem; filter: grayscale(0.5); }
+        .btn-icon:hover { filter: grayscale(0); }
+
+        .reset-all { margin-top: 30px; background: none; border: none; color: #777; text-decoration: underline; cursor: pointer; font-size: 0.8rem; }
     </style>
 </head>
 <body>
@@ -70,7 +71,7 @@
             <button class="choice-btn btn-out" onclick="pick('out')"><span>🚗</span>בחוץ</button>
         </div>
 
-        <div id="counter-display" style="font-weight: bold; color: var(--accent);">
+        <div id="counter-display" style="font-weight: bold; color: var(--accent); font-size: 1.1rem;">
             דייטים שעשינו: 0
         </div>
     </div>
@@ -79,6 +80,8 @@
         <h3 style="margin-top:0; font-size: 1rem; color: #555;">🤔 מתלבטים לגבי:</h3>
         <div id="wishlist-items"></div>
     </div>
+
+    <button class="reset-all" onclick="fullReset()">אפס הכל והתחל מחדש</button>
 
     <div id="modal">
         <div class="modal-content">
@@ -95,16 +98,18 @@
     <script>
         const database = {
             home: [
-                {t: "ערב שוקולד ויין", d: "טעימות עיוורות של שוקולדים שונים עם יין טוב", e: "🍷"},
-                {t: "בניית מבצר בסלון", d: "כמו פעם - שמיכות, כריות וסרט בתוך המבצר", e: "🏰"},
-                {t: "סדנת מסאז' זוגית", d: "לומדים טכניקות חדשות אחד על השנייה", e: "💆‍♂️"},
-                {t: "ערב אלבומי תמונות", d: "עוברים על תמונות מהילדות ומהחתונה", e: "📸"}
+                {t: "ערב שוקולד ויין", d: "טעימות עיוורות של שוקולדים שונים עם ייין טוב", e: "🍷"},
+                {t: "בניית מבצר בסלון", d: "שמיכות, כריות וסרט בתוך 'מבצר' כמו פעם", e: "🏰"},
+                {t: "ערב אלבומי תמונות", d: "עוברים על תמונות ישנות ומעלים זיכרונות", e: "📸"},
+                {t: "פיקניק בסלון", d: "שמיכה על הרצפה, גבינות ויין", e: "🧺"},
+                {t: "ערב משחקי קופסה", d: "תחרות טאקי או מונופול עד השעות הקטנות", e: "🎲"}
             ],
             out: [
-                {t: "הופעת סטנד-אפ", d: "יוצאים לצחוק יחד על כל הצרות", e: "🎤"},
+                {t: "הופעת סטנד-אפ", d: "יוצאים לצחוק מכל הלב", e: "🎤"},
                 {t: "פיקניק שקיעה", d: "קפה ומאפה מול הים בשעה הכי יפה", e: "🌅"},
-                {t: "באולינג תחרותי", d: "המנצח מקבל פטור משטיפת כלים שבוע!", e: "🎳"},
-                {t: "דייט גלידה", d: "סיבוב לילי עם גלידה מושחתת", e: "🍦"}
+                {t: "דייט גלידה", d: "סיבוב לילי עם גלידה מושחתת", e: "🍦"},
+                {t: "ערב קריוקי", d: "חדר פרטי ושירי אהבה ששניכם אוהבים", e: "🎶"},
+                {t: "הליכה לילית", d: "פשוט ללכת יחד בחוץ ולדבר על הכל", e: "🌙"}
             ]
         };
 
@@ -115,7 +120,6 @@
         function pick(type) {
             const list = database[type];
             currentIdea = list[Math.floor(Math.random() * list.length)];
-            
             document.getElementById('res-emoji').innerText = currentIdea.e;
             document.getElementById('res-title').innerText = currentIdea.t;
             document.getElementById('res-desc').innerText = currentIdea.d;
@@ -125,24 +129,40 @@
         function addToWishlist() {
             if (!wishlist.find(i => i.t === currentIdea.t)) {
                 wishlist.push(currentIdea);
-                saveAndRefresh();
+                save();
             }
             closeModal();
         }
 
         function markAsDoneCurrent() {
             doneCount++;
-            saveAndRefresh();
+            save();
             closeModal();
         }
 
         function markAsDoneFromList(index) {
             wishlist.splice(index, 1);
             doneCount++;
-            saveAndRefresh();
+            save();
         }
 
-        function saveAndRefresh() {
+        function removeFromList(index) {
+            if(confirm("למחוק את הרעיון מההתלבטויות?")) {
+                wishlist.splice(index, 1);
+                save();
+            }
+        }
+
+        function fullReset() {
+            if(confirm("בטוח? זה יאפס את מונה הדייטים וימחק את כל ההתלבטויות שלכם.")) {
+                doneCount = 0;
+                wishlist = [];
+                save();
+                alert("הלוח נוקה! תהנו מהתחלה חדשה ❤️");
+            }
+        }
+
+        function save() {
             localStorage.setItem('dates_done_count', doneCount);
             localStorage.setItem('dates_wishlist', JSON.stringify(wishlist));
             render();
@@ -160,7 +180,10 @@
                     listDiv.innerHTML += `
                         <div class="list-item">
                             <span>${item.e} ${item.t}</span>
-                            <span class="done-tick" onclick="markAsDoneFromList(${index})">✅</span>
+                            <div class="item-actions">
+                                <span class="btn-icon" title="עשינו!" onclick="markAsDoneFromList(${index})">✅</span>
+                                <span class="btn-icon" title="מחק" onclick="removeFromList(${index})">🗑️</span>
+                            </div>
                         </div>
                     `;
                 });
