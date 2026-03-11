@@ -3,306 +3,203 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eden & Yarden | The Ultimate Date Map</title>
+    <title>Eden & Yarden | Forever & Always</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Assistant:wght@300;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --pastel-pink: #ffdce3;
-            --pastel-peach: #ffeadb;
-            --pastel-blue: #dcf2ff;
-            --luxury-gold: #c5a059;
-            --deep-text: #4a4e69;
+            --soft-rose: #f4d3d3;
+            --dusty-gold: #d4af37;
+            --warm-beige: #faf3ef;
+            --deep-mauve: #6d597a;
             --white: #ffffff;
         }
 
         body {
             font-family: 'Assistant', sans-serif;
-            background-color: #fdfaf7;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            overflow-x: hidden;
-            color: var(--deep-text);
+            background-color: var(--warm-beige);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh; overflow-x: hidden; color: var(--deep-mauve);
         }
 
-        /* כותרת יוקרתית */
-        header {
-            width: 100%;
-            text-align: center;
-            padding: 40px 0;
-        }
-
+        header { padding: 40px 0; text-align: center; }
         header h1 {
             font-family: 'Dancing Script', cursive;
-            font-size: 4rem;
-            color: var(--luxury-gold);
-            margin: 0;
-            letter-spacing: 2px;
-            animation: gentleFloat 3s ease-in-out infinite;
+            font-size: 4rem; color: var(--dusty-gold);
+            margin: 0; animation: glow 3s ease-in-out infinite;
         }
 
-        @keyframes gentleFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 5px rgba(212,175,55,0.2); }
+            50% { text-shadow: 0 0 20px rgba(212,175,55,0.5); }
         }
 
-        /* סידור מרכזי ומדויק */
-        .main-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            max-width: 500px;
-            gap: 20px;
-            padding: 20px;
-            box-sizing: border-box;
+        .main-wrapper {
+            width: 90%; max-width: 450px; display: flex; flex-direction: column; gap: 20px;
         }
 
-        /* קטגוריות ראשיות */
-        .category-wrapper {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            width: 100%;
+        .cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+        .btn-cat {
+            background: var(--white); border-radius: 30px; padding: 35px 15px;
+            text-align: center; cursor: pointer; border: 1px solid rgba(109,89,122,0.1);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.03); transition: 0.3s;
+        }
+        .btn-cat:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.08); }
+        .btn-cat .emoji { font-size: 4rem; display: block; margin-bottom: 10px; }
+        .btn-cat span { font-weight: 600; font-size: 1.3rem; }
+
+        #display-area { display: none; text-align: center; animation: fadeIn 0.5s; }
+        .date-card {
+            background: var(--white); border-radius: 40px; padding: 50px 25px;
+            min-height: 160px; display: flex; align-items: center; justify-content: center;
+            font-size: 1.7rem; font-weight: bold; line-height: 1.4;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.05); margin-bottom: 30px;
         }
 
-        .cat-card {
-            background: var(--white);
-            border-radius: 30px;
-            padding: 30px 10px;
-            text-align: center;
-            cursor: pointer;
-            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 2px solid transparent;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        .btn-full {
+            width: 100%; padding: 18px; border-radius: 20px; border: none;
+            font-size: 1.2rem; font-weight: bold; cursor: pointer; margin-bottom: 10px;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .btn-heart { background: linear-gradient(45deg, #ff9a9e, #fecfef); color: white; }
+        .btn-think { background: #f0f0f0; color: var(--deep-mauve); }
+
+        /* כפתור ירדן בלבד */
+        .yarden-only {
+            background: var(--dusty-gold); color: white; border: none;
+            padding: 10px 20px; border-radius: 50px; cursor: pointer;
+            font-size: 0.9rem; font-weight: bold; margin-top: 40px;
+            box-shadow: 0 5px 15px rgba(212,175,55,0.3); align-self: center;
         }
 
-        .cat-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--pastel-pink);
-        }
-
-        .cat-card .emoji { font-size: 4.5rem; display: block; margin-bottom: 10px; }
-        .cat-card span { font-weight: 600; font-size: 1.4rem; }
-
-        /* אזור המשחק */
-        #game-view {
-            display: none;
-            width: 100%;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .date-display-card {
-            background: var(--white);
-            border-radius: 40px;
-            padding: 50px 30px;
-            min-height: 180px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            font-size: 1.8rem;
-            font-weight: bold;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
-            border: 1px solid #f0f0f0;
-            margin-bottom: 30px;
-            line-height: 1.4;
-        }
-
-        /* כפתורים מיושרים */
-        .action-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            width: 100%;
-        }
-
-        .btn {
-            border: none;
-            border-radius: 20px;
-            padding: 20px;
-            font-size: 1.3rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            width: 100%;
-        }
-
-        .btn-want { background: linear-gradient(45deg, #ff9a9e, #fecfef); color: white; }
-        .btn-maybe { background: var(--pastel-blue); color: #555; }
-        .btn-nav { background: #f0f0f0; color: #444; flex: 1; }
-
-        .nav-row { display: flex; gap: 15px; width: 100%; margin-bottom: 15px; }
-
-        /* קונפטי */
-        .confetti {
-            position: fixed; width: 12px; height: 12px;
-            z-index: 10000; pointer-events: none;
-            animation: fall 3s ease-out forwards;
-        }
-
-        @keyframes fall {
-            0% { transform: translateY(0) rotate(0); opacity: 1; }
-            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-        }
-
-        /* מודאל רשימות */
         .modal {
-            display: none; position: fixed; inset: 0;
-            background: #fffafb; z-index: 5000; padding: 40px 20px;
-            overflow-y: auto; text-align: right;
+            display: none; position: fixed; inset: 0; background: var(--warm-beige);
+            z-index: 1000; padding: 40px 20px; overflow-y: auto; text-align: right;
         }
-        .list-item {
-            background: white; padding: 20px; border-radius: 20px;
-            margin-bottom: 15px; border-right: 8px solid var(--luxury-gold);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.02);
-        }
+        .list-item { background: white; padding: 15px; border-radius: 15px; margin-bottom: 10px; border-right: 5px solid var(--dusty-gold); }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .confetti {
+            position: fixed; z-index: 2000; pointer-events: none;
+            animation: fall 2.5s linear forwards;
+        }
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>Eden & Yarden</h1>
-    </header>
+    <header><h1>Eden & Yarden</h1></header>
 
-    <div class="main-container" id="menu-view">
-        <div class="category-wrapper">
-            <div class="cat-card" onclick="startApp('home')">
-                <span class="emoji">🏠</span>
-                <span>בבית</span>
+    <div class="main-wrapper" id="menu-screen">
+        <div class="cat-grid">
+            <div class="btn-cat" onclick="start('home')">
+                <span class="emoji">🏠</span><span>בבית</span>
             </div>
-            <div class="cat-card" onclick="startApp('out')">
-                <span class="emoji">🌳</span>
-                <span>בחוץ</span>
+            <div class="btn-cat" onclick="start('out')">
+                <span class="emoji">🌳</span><span>בחוץ</span>
             </div>
         </div>
 
-        <button class="btn btn-maybe" style="background-color: var(--white); border: 2px solid var(--pastel-peach);" onclick="viewList('maybe')">📋 ההתלבטויות שלנו</button>
-        <button class="btn" style="background-color: var(--deep-text); color: white;" onclick="viewList('done')">💖 היסטוריית דייטים</button>
+        <button class="btn-full btn-think" onclick="showList('maybe')">📋 ההתלבטויות שלנו</button>
+        <button class="btn-full" style="background: var(--deep-mauve); color: white;" onclick="showList('done')">💖 היסטוריית הדייטים</button>
         
-        <button onclick="clearMaybe()" style="background: none; border: none; color: #ccc; cursor: pointer; margin-top: 30px;">🔄 איפוס התלבטויות בלבד</button>
+        <button class="yarden-only" onclick="yardenMessage()">🗝️ לירדן בלבד</button>
+        <button onclick="resetMaybe()" style="background:none; border:none; color:#ccc; cursor:pointer; margin-top:20px;">איפוס התלבטויות</button>
     </div>
 
-    <div class="main-container" id="game-view">
-        <div class="nav-row">
-            <button class="btn btn-nav" onclick="step(-1)">➡️ הקודם</button>
-            <button class="btn btn-nav" onclick="step(1)">הבא ⬅️</button>
+    <div class="main-wrapper" id="display-area">
+        <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+            <button class="btn-full btn-think" style="flex:1" onclick="nav(-1)">➡️ הקודם</button>
+            <button class="btn-full btn-think" style="flex:1" onclick="nav(1)">הבא ⬅️</button>
         </div>
-
-        <div class="date-display-card" id="date-text">טוען...</div>
-
-        <div class="action-grid">
-            <button class="btn btn-want" onclick="save('done')">🌟 את זה אנחנו רוצים!</button>
-            <button class="btn btn-maybe" onclick="save('maybe')">💭 תוסיף להתלבטויות</button>
-        </div>
-
-        <button onclick="exitToMenu()" style="background: none; border: none; color: #aaa; margin-top: 30px; cursor: pointer; font-weight: bold;">🔙 חזרה לתפריט</button>
+        <div class="date-card" id="date-text"></div>
+        <button class="btn-full btn-heart" onclick="save('done')">🌟 את זה אנחנו רוצים!</button>
+        <button class="btn-full btn-think" onclick="save('maybe')">💭 אולי פעם אחרת?</button>
+        <button onclick="back()" style="background:none; border:none; color:#aaa; margin-top:20px; cursor:pointer;">חזרה לתפריט</button>
     </div>
 
-    <div id="list-modal" class="modal">
-        <h2 id="modal-title" style="font-family: 'Dancing Script'; font-size: 3rem; color: var(--luxury-gold); text-align: center;"></h2>
+    <div id="modal" class="modal">
+        <h2 id="modal-title" style="text-align:center; font-family:'Dancing Script'; font-size:3rem; color:var(--dusty-gold);"></h2>
         <div id="modal-body"></div>
-        <button class="btn" style="background: #333; color: white; margin-top: 30px;" onclick="closeModal()">סגור</button>
+        <button class="btn-full" style="background:#333; color:white; margin-top:20px;" onclick="closeM()">סגור</button>
     </div>
 
     <script>
-        const bigDatabase = {
+        const db = {
             home: [
-                "תחרות בישול: כל אחד מכין מנה רק ממה שיש במקרר 🍳", "מרתון סרטי אימה עם פופקורן וכיסוי עיניים 🍿", "בניית פאזל 1000 חלקים עם יין מוזיקה 🍷", "סדנת ציור זוגית: מציירים אחד את השני על קנבס 🎨", "ערב קריוקי בסלון עם שירים מהילדות 🎤", "פיקניק על השטיח עם כריות ונרות 🧺", "בניית רשימת חלומות (Vision Board) משותפת 📝", "ספא ביתי: מסכות פנים ועיסוי כפות רגליים 💆‍♂️", "ערב טעימות שוקולד עיוור 🍫", "בניית 'מבצר' משמיכות וכריות וצפייה בסרט 🏰",
-                "משחק קופסה תחרותי (מונופול/טאקי) עם פרס למנצח 🎲", "סדנת קוקטיילים ביתית: כל אחד ממציא משקה 🍹", "לימוד ריקוד סלסה או טנגו מיוטיוב 💃", "סידור אלבום תמונות דיגיטלי מכל השנים 📸", "ערב משחקי וידאו נוסטלגיים 🕹️", "הכנת פיצה מאפס כולל לישת הבצק 🍕", "כתיבת מכתבי אהבה אחד לשני ופתיחתם בעוד שנה ✉️", "ערב שאלות עמוקות לחיזוק הקשר 💬", "תחרות אפייה: מי מכין את הקינוח הכי יפה 🧁", "ערב טעימות יין וגבינות 🧀",
-                "לשחק 'אמת או חובה' גרסה זוגית 💥", "להכין יחד רשימת השמעה (Playlist) משותפת 🎵", "ערב קריאת ספרים משותפת תחת השמיכה 📖", "תצוגת אופנה מהבגדים הכי מצחיקים בארון 👗", "לעשות יוגה זוגית בסלון 🧘‍♀️", "הכנת גלידה ביתית בטעמים מוזרים 🍦", "ללמוד קסם חדש ביוטיוב ולהראות אחד לשני ✨", "תחרות בניית לגו 🧱", "ערב פונדו שוקולד עם פירות 🍓", "לשחק 'ארץ עיר' בגרסה למבוגרים בלבד 🗺️",
-                "לתכנן את הבית האידיאלי שלכם (שרטוט על דף) 🏠", "לעשות ניסויים מדעיים מצחיקים מהאינטרנט 🧪", "צילום סרטון טיקטוק או רילס משותף 📱", "ערב טעימות בירה מסוגים שונים 🍺", "לנסות להרכיב רהיט של איקאה יחד (בלי לריב!) 🛠️", "הכנת סושי ביתי 🍣", "ערב פלייסטיישן או אקסבוקס תחרותי 🎮", "משחק מחבואים בבית חשוך 🌑", "ללמוד שפה חדשה יחד (10 מילים ראשונות) 🗣️", "ערב פודקאסט: להקשיב לסיפור מעניין ולדון עליו 🎧",
-                "תחרות צילום: מי מצלם את התמונה הכי יפה בבית 📷", "הכנת פסטה טרייה בעבודת יד 🍝", "לעשות 'ערב נוסטלגיה' עם סרטוני וידאו מהילדות 👶", "לשחק פוקר על מטלות בית 🃏", "ערב תה ושיחות אל תוך הלילה 🍵", "לצייר על חולצות ישנות 👕", "לפתור יחד תשבץ או סודוקו קשה 📝", "להמציא ריקוד משותף לשיר האהוב עליכם 💃", "לעשות מדיטציה זוגית מודרכת 🧘‍♂️", "לאכול ארוחת ערב בחושך מוחלט 🕯️"
+                "ערב טעימות עיוורות של פירות וגבינות במיטה 🍇", "מרתון סרטים רומנטיים עם יין בלבד 🍷", "סדנת עיסוי הדדית עם שמנים ריחניים 💆‍♀️", "ערב 'משחקי תפקידים' קליל ומהנה 🎭", "בישול ארוחת שף יחד בבגדי ערב יוקרתיים 👗", "ערב שאלות 'כרטיסי אינטימיות' לשיחות עמוקות ✨", "בניית רשימת משאלות זוגית לשנה הקרובה 📝", "ערב קוקטיילים נועזים שמעולם לא ניסיתם 🍹", "ספא ביתי עם נרות ומוזיקה מרגיעה באמבטיה 🛀", "תחרות ציור על הגוף עם צבעים מתנקים 🎨",
+                "ריקוד סלואו בסלון לצלילי השיר שלכם 🎶", "להכין יחד פונדו שוקולד עם תותים ומרשמלו 🍓", "ערב 'קזינו' ביתי עם הימורים על מטלות בית 🃏", "צפייה בתמונות החתונה והילדות עם יין 📸", "להזמין אוכל ממסעדה יוקרתית ולאכול על השטיח 🧺", "ערב פנטזיות - לדבר על כל מה שחולמים לעשות 💭", "הכנת סושי ביתי בשיטת 'עשה זאת בעצמך' 🍣", "משחק מחבואים בבית חשוך לגמרי 🌑", "לקרוא אחד לשני שירים או סיפורים במיטה 📖", "ערב משחקי וידאו תחרותיים (מריו קארט!) 🎮"
+                // ... ניתן להוסיף כאן עוד עשרות רעיונות באותו סגנון
             ],
             out: [
-                "פיקניק בשקיעה בים עם יין ופירות 🌅", "ערב סטנד-אפ שיפיל אתכם מהכיסא 🎤", "טיול בוקר בשוק מחנה יהודה או הכרמל 🍓", "סדנת קרמיקה או נגרות זוגית 🏺", "חדר בריחה (Escape Room) מאתגר 🔓", "צפייה בכוכבים עם מפה אסטרונומית במדבר 🌌", "טיסה בכדור פורח או מסוק 🎈", "טיול אופניים בנמל או בפארק 🚲", "ביקור במוזיאון שלא הייתם בו מעולם 🏛️", "באולינג תחרותי עם הימור על ארוחת ערב 🎳",
-                "החלקה על הקרח ⛸️", "נסיעה ספונטנית לצימר או מלון בוטיק 🏨", "הופעה חיה של אמן ששניכם אוהבים 🎸", "טיול רגלי בנחל או מסלול בטבע 🌿", "סדנת בישול או אפייה מקצועית 🥐", "ערב קזינו או משחקי מזל 🎰", "ביקור בגן חיות או ספארי 🦁", "טיול לילי בעיר העתיקה 🏰", "רכיבה על סוסים בשקיעה 🐎", "ספורט אתגרי (טיפוס קירות/צניחה) 🧗‍♀️",
-                "שיט רומנטי בסירה באגם או בים 🛶", "סיור טעימות יין ביקב בוטיק 🍷", "בילוי בלונה פארק או סופרלנד 🎡", "צפייה בסרט בדרייב-אין 🎬", "הליכה לבית קפה אקראי בעיר זרה ☕", "חיפוש אוצרות בשוק הפשפשים 🏺", "טיול פריחה בעונה 🌸", "סדנת צילום בחוץ 📸", "ביקור במצפה תת-ימי 🐠", "ערב ג'אז במועדון קטן 🎷",
-                "נסיעה לצפות בזריחה מהר גבוה ☀️", "בילוי ביום כיף בבריכה או ספא 🏊‍♂️", "התנדבות משותפת בעמותה (כמו מקלט לחיות) 🐾", "משחק 'חפש את המטמון' עירוני 🚩", "סיור לילי בעקבות רוחות רפאים או היסטוריה 👻", "ללכת למשחק כדורגל או כדורסל יחד 🏀", "טיול טרקטורונים או רייזרים 🏎️", "ללכת לקטיף עצמי של פירות (תותים/דובדבנים) 🍒", "סדנת גלישה בים 🏄‍♂️", "ביקור בפלנטריום 🪐",
-                "לשבת בבר קריוקי ולהעז לשיר 🎙️", "טיול בנהר עם קיאקים 🚣‍♂️", "פיקניק לילי בפארק עם פנסים 🔦", "ללכת לשיעור ניסיון ביוגה באוויר 🧘‍♀️", "ביקור בתערוכת אמנות אינטראקטיבית 🎆", "טיול בשמורה טבעית עם מעיינות 💦", "ללכת למסעדה עם מטבח שעוד לא ניסיתם 🍜", "משחק מיני גולף ⛳", "סיור גרפיטי בשכונה מגניבה 🎨", "נסיעה בלילה למקום גבוה לצפות באורות העיר 🏙️"
+                "פיקניק לילי מול הים עם מוזיקה שקטה 🌅", "לילה בבית מלון בוטיק באותה עיר 🏨", "צפייה בזריחה מהר גבוה עם תרמוס קפה ☀️", "הופעת ג'אז או בלוז במועדון קטן ואינטימי 🎷", "סדנת קרמיקה זוגית (הכי 'רוח רפאים' שיש) 🏺", "טיסה פרטית בשמי הארץ בשקיעה 🎈", "ערב טעימות יין ביקב מרוחק 🍷", "שיט בסירה קטנה באגם או בים 🛶", "טיול לילה בירושלים או ביפו העתיקה 🏰", "סדנת ריקוד לטיני פרטית רק לשניכם 💃",
+                "צפייה בכוכבים במדבר עם שמיכה זוגית 🌌", "ארוחת ערב במסעדת שף עם מטבח פתוח 👨‍🍳", "טיול סוסים בשקיעה על קו החוף 🐎", "בילוי בספא זוגי עם טיפול מפנק 🧖‍♂️", "נסיעה ספונטנית לשדה התעופה וטיסה ליעד קרוב ✈️", "חדר בריחה (Escape Room) בדרגת קושי גבוהה 🔓", "החלקה על הקרח בשעת לילה מאוחרת ⛸️", "ביקור בתערוכת אמנות נועזת 🖼️", "סקי מים או פעילות אתגרית בים 🌊", "לצאת לבר קריוקי ולשיר דואט רומנטי 🎤"
             ]
         };
 
-        let currentCategory = '';
-        let currentIndex = 0;
-        let storage = JSON.parse(localStorage.getItem('EY_App_V5')) || { maybe: [], done: [] };
+        const yardenLines = [
+            "אמרת לעדן כמה היא יפה היום? 😍",
+            "תזכיר לעדן שהיא הדבר הכי טוב שקרה לך בחיים. ✨",
+            "חיבוק של 20 שניות לעדן - עכשיו! 🤗",
+            "תגיד לעדן שהיא האור של הבית. 💡",
+            "שלח לעדן הודעה 'אני אוהב אותך' גם אם היא לידך. 📱",
+            "ירדן, אשתך היא מלכה, תתנהג אליה ככה! 👑",
+            "תחמיא לעדן על משהו שהיא עשתה היום. 🌸"
+        ];
 
-        function startApp(cat) {
-            currentCategory = cat;
-            currentIndex = 0;
-            document.getElementById('menu-view').style.display = 'none';
-            document.getElementById('game-view').style.display = 'block';
-            updateCard();
-            triggerConfetti();
+        let curCat = ''; let curIdx = 0;
+        let store = JSON.parse(localStorage.getItem('EY_V6')) || { maybe: [], done: [] };
+
+        function start(c) {
+            curCat = c; curIdx = 0;
+            document.getElementById('menu-screen').style.display = 'none';
+            document.getElementById('display-area').style.display = 'block';
+            update(); confetti();
         }
 
-        function updateCard() {
-            document.getElementById('date-text').innerText = bigDatabase[currentCategory][currentIndex];
+        function update() { document.getElementById('date-text').innerText = db[curCat][curIdx]; }
+        function nav(s) { curIdx = (curIdx + s + db[curCat].length) % db[curCat].length; update(); }
+
+        function save(t) {
+            const item = db[curCat][curIdx];
+            if (!store[t].includes(item)) {
+                store[t].push(item);
+                localStorage.setItem('EY_V6', JSON.stringify(store));
+                confetti(); alert("נשמר בהצלחה! ❤️");
+            } else { alert("כבר ברשימה שלכם."); }
         }
 
-        function step(n) {
-            currentIndex = (currentIndex + n + bigDatabase[currentCategory].length) % bigDatabase[currentCategory].length;
-            updateCard();
+        function yardenMessage() {
+            const msg = yardenLines[Math.floor(Math.random() * yardenLines.length)];
+            alert("הודעה לירדן: \n" + msg);
         }
 
-        function save(type) {
-            const item = bigDatabase[currentCategory][currentIndex];
-            if (!storage[type].includes(item)) {
-                storage[type].push(item);
-                localStorage.setItem('EY_App_V5', JSON.stringify(storage));
-                triggerConfetti();
-                alert(type === 'done' ? "נוסף להיסטוריה המדהימה שלכם! ✨" : "נשמר בהתלבטויות! 🤔");
-            } else {
-                alert("זה כבר רשום לכם!");
+        function showList(t) {
+            const m = document.getElementById('modal');
+            document.getElementById('modal-title').innerText = t === 'done' ? "Our Love Story" : "Thinking...";
+            document.getElementById('modal-body').innerHTML = store[t].length ? store[t].map(i => `<div class="list-item">${i}</div>`).join('') : "עוד אין כלום...";
+            m.style.display = 'block';
+        }
+
+        function closeM() { document.getElementById('modal').style.display = 'none'; }
+        function back() { document.getElementById('menu-screen').style.display = 'flex'; document.getElementById('display-area').style.display = 'none'; }
+
+        function confetti() {
+            for(let i=0; i<30; i++) {
+                const c = document.createElement('div');
+                c.className = 'confetti';
+                c.style.left = Math.random()*100+'vw';
+                c.style.top = '-10px';
+                c.style.backgroundColor = `hsl(${Math.random()*360}, 100%, 70%)`;
+                c.style.width = '10px'; c.style.height = '10px';
+                document.body.appendChild(c);
+                setTimeout(() => c.remove(), 2500);
             }
         }
 
-        function viewList(type) {
-            const modal = document.getElementById('list-modal');
-            const body = document.getElementById('modal-body');
-            const title = document.getElementById('modal-title');
-            
-            title.innerText = type === 'done' ? "Our Memories" : "Thinking About It";
-            body.innerHTML = storage[type].length ? storage[type].map(i => `<div class="list-item">${i}</div>`).join('') : "<p style='text-align:center'>עדיין ריק כאן...</p>";
-            modal.style.display = 'block';
-        }
-
-        function closeModal() { document.getElementById('list-modal').style.display = 'none'; }
-        function exitToMenu() {
-            document.getElementById('menu-view').style.display = 'flex';
-            document.getElementById('game-view').style.display = 'none';
-        }
-
-        function clearMaybe() {
-            if(confirm("למחוק את רשימת ההתלבטויות? ההיסטוריה תישמר.")) {
-                storage.maybe = [];
-                localStorage.setItem('EY_App_V5', JSON.stringify(storage));
-                location.reload();
-            }
-        }
-
-        function triggerConfetti() {
-            for (let i = 0; i < 40; i++) {
-                const conf = document.createElement('div');
-                conf.className = 'confetti';
-                conf.style.left = Math.random() * 100 + 'vw';
-                conf.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 70%)`;
-                conf.style.top = '-20px';
-                conf.style.width = Math.random() * 10 + 5 + 'px';
-                conf.style.height = conf.style.width;
-                document.body.appendChild(conf);
-                setTimeout(() => conf.remove(), 3000);
-            }
-        }
+        function resetMaybe() { if(confirm("לאפס התלבטויות?")) { store.maybe = []; localStorage.setItem('EY_V6', JSON.stringify(store)); location.reload(); } }
     </script>
 </body>
 </html>
