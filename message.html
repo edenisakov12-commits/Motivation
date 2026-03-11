@@ -3,42 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>עדן & ירדן - הודעות מהלב 💖</title>
+    <title>עדן & ירדן - הבית שלנו 💖</title>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-messaging-compat.js"></script>
     <style>
-        body { font-family: sans-serif; background: #fff0f5; display: flex; flex-direction: column; align-items: center; padding: 20px; }
-        .container { background: white; padding: 25px; border-radius: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); width: 100%; max-width: 350px; text-align: center; }
-        .btn { background: #fff; border: 2px solid #ff69b4; border-radius: 15px; padding: 15px; margin: 5px; cursor: pointer; width: 45%; font-size: 14px; transition: 0.2s; vertical-align: top; }
-        .btn span { font-size: 24px; display: block; margin-bottom: 5px; }
-        .status-box { background: #f0f0f0; padding: 15px; border-radius: 15px; margin-top: 20px; font-size: 14px; color: #555; border: 1px dashed #ccc; }
+        body { font-family: sans-serif; background: #fff0f5; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .container { background: white; padding: 30px; border-radius: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 85%; max-width: 350px; text-align: center; }
+        h1 { color: #ff69b4; font-size: 24px; margin-bottom: 20px; }
+        .btn { background: #fff; border: 2px solid #ff69b4; border-radius: 20px; padding: 20px; margin: 10px 0; cursor: pointer; width: 100%; font-size: 18px; font-weight: bold; color: #ff69b4; transition: 0.3s; }
+        .btn:active { background: #ff69b4; color: white; transform: scale(0.95); }
+        .status-box { margin-top: 20px; padding: 15px; border-radius: 15px; font-size: 13px; background: #f8f8f8; color: #666; word-break: break-all; }
+        .setup-btn { background: #ff69b4; color: white; border: none; padding: 12px; border-radius: 10px; margin-top: 10px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>היי עדן ✨</h1>
-    <p>מה להזכיר לירדן?</p>
+    <h1>היי ❤️</h1>
     
-    <div style="display: flex; flex-wrap: wrap; justify-content: center;">
-        <button class="btn" onclick="copyToken()">
-            <span>📲</span> שלב 1: העתק מפתח
-        </button>
-        <button class="btn" onclick="alert('בדיקה: מטרנה בדרך!')">
-            <span>🍼</span> מטרנה לרום
-        </button>
-        <button class="btn" onclick="alert('בדיקה: חלב בדרך!')">
-            <span>🥛</span> להביא חלב
-        </button>
-        <button class="btn" onclick="alert('בדיקה: אהבה בדרך!')">
-            <span>💖</span> הודעת אהבה
-        </button>
+    <div id="main-ui" style="display: none;">
+        <button class="btn" onclick="sendToPartner('אל תשכח מטרנה לרום! 🍼')">🍼 מטרנה לרום</button>
+        <button class="btn" onclick="sendToPartner('אוהבת אותך! ❤️')">❤️ הודעת אהבה</button>
+        <button class="btn" onclick="sendToPartner('צריך לקנות חלב 🥛')">🥛 להביא חלב</button>
     </div>
 
-    <div id="status" class="status-box">
-        טוען הגדרות... <br>
-        (אם יש שגיאה, ודאי שפתחת מהמסך הבית)
+    <div id="setup-ui">
+        <p>כדי להתחיל, חייבים לאשר התראות:</p>
+        <button class="setup-btn" onclick="initNotifications()">לחצי כאן לאישור 🔔</button>
     </div>
+
+    <div id="status" class="status-box">טוען מערכת...</div>
 </div>
 
 <script>
@@ -51,47 +45,31 @@
         appId: "1:712427275013:web:a6a579f958815690b86d6c"
     };
 
-    const statusDiv = document.getElementById('status');
+    firebase.initializeApp(firebaseConfig);
+    const messaging = firebase.messaging();
 
-    // פונקציה שבודקת בזהירות אם יש התראות
-    function startApp() {
-        if (!('Notification' in window)) {
-            statusDiv.innerHTML = "<b>שימי לב:</b> באייפון חייבים ללחוץ על 'שיתוף' ואז 'הוסף למסך הבית' כדי שזה יעבוד.";
-            return;
-        }
-
+    async function initNotifications() {
         try {
-            firebase.initializeApp(firebaseConfig);
-            const messaging = firebase.messaging();
-
-            messaging.getToken({ vapidKey: 'NH9xnzPfdIK_QLxKGmX9ErMYzDIBuAIzK2crtUEhmTU' })
-                .then((token) => {
-                    if (token) {
-                        statusDiv.style.background = "#e8f5e9";
-                        statusDiv.innerHTML = "✅ המערכת מוכנה! <br> לחצי על 'העתק מפתח' ושלחי לי.";
-                        window.myToken = token;
-                    }
-                })
-                .catch((err) => {
-                    statusDiv.innerHTML = "צריך לאשר התראות בטלפון. <br> (הגדרות > התראות)";
-                });
-        } catch (e) {
-            statusDiv.innerHTML = "משהו השתבש בטעינה. ודאי שאת פותחת מהמסך הבית.";
+            const permission = await Notification.requestPermission();
+            if (permission === 'granted') {
+                const token = await messaging.getToken({ vapidKey: 'NH9xnzPfdIK_QLxKGmX9ErMYzDIBuAIzK2crtUEhmTU' });
+                if (token) {
+                    document.getElementById('status').innerText = "המפתח שלך (שלחי לי אותו): " + token;
+                    document.getElementById('setup-ui').style.display = 'none';
+                    document.getElementById('main-ui').style.display = 'block';
+                    console.log(token);
+                }
+            } else {
+                alert("חייבים לאשר התראות בהגדרות הטלפון!");
+            }
+        } catch (error) {
+            document.getElementById('status').innerText = "שגיאה: ודאי שפתחת מהמסך הבית!";
         }
     }
 
-    function copyToken() {
-        if (window.myToken) {
-            navigator.clipboard.writeText(window.myToken);
-            alert("המפתח הועתק בהצלחה! תדביקי אותו פה בצ'אט.");
-        } else {
-            alert("עדיין אין מפתח. ודאי שאישרת התראות באפליקציה שעל מסך הבית.");
-        }
+    function sendToPartner(msg) {
+        alert("ההודעה '" + msg + "' תישלח ברגע שנזין את המפתח של ירדן בקוד!");
     }
-
-    // הפעלת האפליקציה
-    startApp();
 </script>
-
 </body>
 </html>
