@@ -4,60 +4,83 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>הדייטים של עדן וירדן ❤️</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root {
             --eden-pink: #ffafbd;
             --yarden-orange: #ffc3a0;
             --accent: #ff4b2b;
             --success: #4caf50;
-            --gray: #9e9e9e;
         }
         body { 
             font-family: 'Segoe UI', sans-serif; 
             background: linear-gradient(135deg, var(--eden-pink), var(--yarden-orange)); 
             margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+            overflow-x: hidden;
         }
         .main-card {
             background: rgba(255, 255, 255, 0.95); padding: 25px; border-radius: 35px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.1); text-align: center; width: 100%; max-width: 400px;
+            animation: slideInUp 0.6s ease-out;
         }
+        @keyframes slideInUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
         h1 { color: var(--accent); margin-bottom: 5px; font-size: 1.6rem; }
         .names { font-weight: bold; color: #777; margin-bottom: 20px; }
         
         .game-buttons { display: flex; gap: 15px; margin-bottom: 20px; }
         .choice-btn {
-            flex: 1; padding: 15px; border-radius: 20px; border: none; cursor: pointer;
-            transition: 0.3s; box-shadow: 0 5px 10px rgba(0,0,0,0.05);
+            flex: 1; padding: 15px; border-radius: 25px; border: none; cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             display: flex; flex-direction: column; align-items: center; font-weight: bold;
+            box-shadow: 0 6px 0 #ddd; position: relative; top: 0;
         }
+        .choice-btn:active { top: 4px; box-shadow: 0 2px 0 #ddd; transform: scale(0.95); }
         .btn-home { background: #fff0f6; color: #d81b60; }
         .btn-out { background: #e6f7ff; color: #0077b6; }
 
+        /* חלונית מעוצבת */
         #modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center;
+            background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: center;
+            backdrop-filter: blur(5px);
         }
         .modal-content {
-            background: white; padding: 30px; border-radius: 30px; width: 85%; max-width: 350px; text-align: center;
+            background: white; padding: 35px; border-radius: 40px; width: 85%; max-width: 380px; text-align: center;
+            position: relative; animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
+        @keyframes popIn { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-        .action-btn { width: 100%; padding: 12px; margin: 5px 0; border-radius: 50px; border: none; font-weight: bold; cursor: pointer; }
+        .idea-display { transition: all 0.3s ease; }
+        .fade-out { opacity: 0; transform: scale(0.9); }
+        .fade-in { opacity: 1; transform: scale(1); }
+
+        .nav-btn {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: var(--accent); color: white; border: none; width: 45px; height: 45px; 
+            border-radius: 50%; cursor: pointer; font-size: 1.2rem; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
+        .prev { right: -20px; }
+        .next { left: -20px; }
+
+        .action-btn { 
+            width: 100%; padding: 14px; margin: 8px 0; border-radius: 50px; border: none; 
+            font-weight: bold; cursor: pointer; transition: 0.2s;
+        }
         .wish-btn { background: #fff3e0; color: #ef6c00; }
-        .done-btn { background: var(--success); color: white; }
+        .done-btn { background: var(--success); color: white; box-shadow: 0 4px 0 #388e3c; }
+        .done-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #388e3c; }
         
         .list-section {
-            width: 100%; max-width: 400px; margin-top: 25px; background: white; border-radius: 20px; padding: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            width: 100%; max-width: 400px; margin-top: 25px; background: white; border-radius: 25px; padding: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
         }
-        .list-item {
-            display: flex; justify-content: space-between; align-items: center; 
-            padding: 10px; border-bottom: 1px solid #f9f9f9; font-size: 0.9rem;
+        .list-item { 
+            display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #f0f0f0; 
+            animation: slideInLeft 0.3s ease;
         }
-        .item-actions { display: flex; gap: 10px; }
-        .btn-icon { cursor: pointer; font-size: 1.1rem; filter: grayscale(0.5); }
-        .btn-icon:hover { filter: grayscale(0); }
-
-        .reset-all { margin-top: 30px; background: none; border: none; color: #777; text-decoration: underline; cursor: pointer; font-size: 0.8rem; }
+        @keyframes slideInLeft { from { transform: translateX(20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
     </style>
 </head>
 <body>
@@ -65,101 +88,112 @@
     <div class="main-card">
         <h1>הדייטים שלנו ❤️</h1>
         <div class="names">עדן & ירדן</div>
-        
         <div class="game-buttons">
-            <button class="choice-btn btn-home" onclick="pick('home')"><span>🏠</span>בבית</button>
-            <button class="choice-btn btn-out" onclick="pick('out')"><span>🚗</span>בחוץ</button>
+            <button class="choice-btn btn-home" onclick="startPick('home')">
+                <span style="font-size: 2.5rem;">🏠</span>בבית
+            </button>
+            <button class="choice-btn btn-out" onclick="startPick('out')">
+                <span style="font-size: 2.5rem;">🚗</span>בחוץ
+            </button>
         </div>
-
-        <div id="counter-display" style="font-weight: bold; color: var(--accent); font-size: 1.1rem;">
-            דייטים שעשינו: 0
-        </div>
+        <div id="counter-display" style="font-weight: bold; color: var(--accent); font-size: 1.2rem;">דייטים שעשינו: 0</div>
     </div>
 
     <div class="list-section" id="wishlist-container" style="display:none;">
-        <h3 style="margin-top:0; font-size: 1rem; color: #555;">🤔 מתלבטים לגבי:</h3>
+        <h3 style="margin:0 0 15px 0; font-size: 1rem; color: #555;">🤔 מחכים לביצוע:</h3>
         <div id="wishlist-items"></div>
     </div>
 
-    <button class="reset-all" onclick="fullReset()">אפס הכל והתחל מחדש</button>
-
     <div id="modal">
         <div class="modal-content">
-            <div id="res-emoji" style="font-size: 3.5rem;"></div>
-            <h2 id="res-title" style="margin: 10px 0;"></h2>
-            <p id="res-desc" style="color: #666; font-size: 0.9rem;"></p>
+            <button class="nav-btn prev" onclick="changeIdea(1)">❯</button>
+            <button class="nav-btn next" onclick="changeIdea(-1)">❮</button>
+
+            <div id="idea-body" class="idea-display">
+                <div id="res-emoji" style="font-size: 4.5rem; margin-bottom: 10px;"></div>
+                <h2 id="res-title" style="margin: 10px 0; color: #333;"></h2>
+                <p id="res-desc" style="color: #666; font-size: 1rem; min-height: 50px;"></p>
+            </div>
             
-            <button class="action-btn wish-btn" onclick="addToWishlist()">✨ שמור להתלבטות</button>
-            <button class="action-btn done-btn" onclick="markAsDoneCurrent()">✅ עשינו את זה!</button>
-            <button onclick="closeModal()" style="background:none; border:none; color:#999; margin-top:10px; cursor:pointer;">סגור</button>
+            <button class="action-btn wish-btn" onclick="addToWishlist()">✨ נשמע טוב, נשמור!</button>
+            <button class="action-btn done-btn" onclick="markAsDoneCurrent()">🎉 עשינו את זה!</button>
+            <button onclick="closeModal()" style="background:none; border:none; color:#999; margin-top:15px; cursor:pointer;">אולי פעם אחרת</button>
         </div>
     </div>
 
     <script>
         const database = {
             home: [
-                {t: "ערב שוקולד ויין", d: "טעימות עיוורות של שוקולדים שונים עם ייין טוב", e: "🍷"},
-                {t: "בניית מבצר בסלון", d: "שמיכות, כריות וסרט בתוך 'מבצר' כמו פעם", e: "🏰"},
-                {t: "ערב אלבומי תמונות", d: "עוברים על תמונות ישנות ומעלים זיכרונות", e: "📸"},
-                {t: "פיקניק בסלון", d: "שמיכה על הרצפה, גבינות ויין", e: "🧺"},
-                {t: "ערב משחקי קופסה", d: "תחרות טאקי או מונופול עד השעות הקטנות", e: "🎲"}
+                {t: "ערב שוקולד ויין", d: "טעימות עיוורות של שוקולדים ויין טוב", e: "🍷"},
+                {t: "בניית מבצר בסלון", d: "שמיכות, כריות וסרט בתוך מבצר", e: "🏰"},
+                {t: "ערב אלבומי תמונות", d: "נזכרים יחד ברגעים היפים שלנו", e: "📸"},
+                {t: "פיקניק בסלון", d: "שמיכה על הרצפה וארוחה קלילה", e: "🧺"},
+                {t: "ערב משחקי קופסה", d: "תחרות טאקי או מונופול", e: "🎲"},
+                {t: "ספא ביתי", d: "מסאז' מפנק עם שמנים ונרות", e: "🕯️"}
             ],
             out: [
                 {t: "הופעת סטנד-אפ", d: "יוצאים לצחוק מכל הלב", e: "🎤"},
-                {t: "פיקניק שקיעה", d: "קפה ומאפה מול הים בשעה הכי יפה", e: "🌅"},
-                {t: "דייט גלידה", d: "סיבוב לילי עם גלידה מושחתת", e: "🍦"},
-                {t: "ערב קריוקי", d: "חדר פרטי ושירי אהבה ששניכם אוהבים", e: "🎶"},
-                {t: "הליכה לילית", d: "פשוט ללכת יחד בחוץ ולדבר על הכל", e: "🌙"}
+                {t: "פיקניק שקיעה", d: "קפה ומאפה מול הגלים", e: "🌅"},
+                {t: "דייט גלידה", d: "סיבוב לילי מתוק", e: "🍦"},
+                {t: "ערב קריוקי", d: "שרים יחד את השירים שלנו", e: "🎶"},
+                {t: "הליכה לילית", d: "פשוט לדבר וללכת יד ביד", e: "🌙"},
+                {t: "סרט ב-VIP", d: "מתפנקים בכורסאות נוחות", e: "🎟️"}
             ]
         };
 
-        let currentIdea = null;
+        let currentType = 'home', currentIndex = 0;
         let doneCount = parseInt(localStorage.getItem('dates_done_count')) || 0;
         let wishlist = JSON.parse(localStorage.getItem('dates_wishlist')) || [];
 
-        function pick(type) {
-            const list = database[type];
-            currentIdea = list[Math.floor(Math.random() * list.length)];
-            document.getElementById('res-emoji').innerText = currentIdea.e;
-            document.getElementById('res-title').innerText = currentIdea.t;
-            document.getElementById('res-desc').innerText = currentIdea.d;
+        function startPick(type) {
+            currentType = type;
+            currentIndex = Math.floor(Math.random() * database[type].length);
+            updateModal();
             document.getElementById('modal').style.display = 'flex';
         }
 
-        function addToWishlist() {
-            if (!wishlist.find(i => i.t === currentIdea.t)) {
-                wishlist.push(currentIdea);
-                save();
-            }
-            closeModal();
+        function changeIdea(direction) {
+            const body = document.getElementById('idea-body');
+            body.classList.add('fade-out');
+            setTimeout(() => {
+                const list = database[currentType];
+                currentIndex = (currentIndex + direction + list.length) % list.length;
+                updateModal();
+                body.classList.remove('fade-out');
+            }, 200);
+        }
+
+        function updateModal() {
+            const idea = database[currentType][currentIndex];
+            document.getElementById('res-emoji').innerText = idea.e;
+            document.getElementById('res-title').innerText = idea.t;
+            document.getElementById('res-desc').innerText = idea.d;
+        }
+
+        function fireConfetti() {
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#ffafbd', '#ffc3a0', '#ff4b2b'] });
         }
 
         function markAsDoneCurrent() {
             doneCount++;
-            save();
+            fireConfetti();
+            setTimeout(() => { save(); closeModal(); }, 500);
+        }
+
+        function addToWishlist() {
+            const idea = database[currentType][currentIndex];
+            if (!wishlist.find(i => i.t === idea.t)) {
+                wishlist.push(idea);
+                save();
+            }
             closeModal();
         }
 
         function markAsDoneFromList(index) {
             wishlist.splice(index, 1);
             doneCount++;
+            fireConfetti();
             save();
-        }
-
-        function removeFromList(index) {
-            if(confirm("למחוק את הרעיון מההתלבטויות?")) {
-                wishlist.splice(index, 1);
-                save();
-            }
-        }
-
-        function fullReset() {
-            if(confirm("בטוח? זה יאפס את מונה הדייטים וימחק את כל ההתלבטויות שלכם.")) {
-                doneCount = 0;
-                wishlist = [];
-                save();
-                alert("הלוח נוקה! תהנו מהתחלה חדשה ❤️");
-            }
         }
 
         function save() {
@@ -172,7 +206,6 @@
             document.getElementById('counter-display').innerText = `דייטים שעשינו: ${doneCount}`;
             const listDiv = document.getElementById('wishlist-items');
             const container = document.getElementById('wishlist-container');
-            
             listDiv.innerHTML = "";
             if (wishlist.length > 0) {
                 container.style.display = 'block';
@@ -180,20 +213,17 @@
                     listDiv.innerHTML += `
                         <div class="list-item">
                             <span>${item.e} ${item.t}</span>
-                            <div class="item-actions">
-                                <span class="btn-icon" title="עשינו!" onclick="markAsDoneFromList(${index})">✅</span>
-                                <span class="btn-icon" title="מחק" onclick="removeFromList(${index})">🗑️</span>
+                            <div>
+                                <span style="cursor:pointer" onclick="markAsDoneFromList(${index})">✅</span>
+                                <span style="cursor:pointer; margin-right:12px;" onclick="removeFromList(${index})">🗑️</span>
                             </div>
-                        </div>
-                    `;
+                        </div>`;
                 });
-            } else {
-                container.style.display = 'none';
-            }
+            } else { container.style.display = 'none'; }
         }
 
+        function removeFromList(index) { wishlist.splice(index, 1); save(); }
         function closeModal() { document.getElementById('modal').style.display = 'none'; }
-        
         render();
     </script>
 </body>
