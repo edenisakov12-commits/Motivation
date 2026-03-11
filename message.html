@@ -9,11 +9,9 @@
     <style>
         body { font-family: sans-serif; background: #fff0f5; display: flex; flex-direction: column; align-items: center; padding: 20px; }
         .container { background: white; padding: 25px; border-radius: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); width: 100%; max-width: 350px; text-align: center; }
-        .btn { background: #fff; border: 2px solid #ff69b4; border-radius: 15px; padding: 15px; margin: 5px; cursor: pointer; width: 45%; font-size: 14px; transition: 0.2s; }
-        .btn:active { transform: scale(0.9); }
-        .btn span { font-size: 24px; display: block; }
-        .send-btn { background: #ff69b4; color: white; width: 100%; padding: 15px; border-radius: 15px; border: none; margin-top: 10px; font-weight: bold; cursor: pointer; }
-        #status { color: #888; font-size: 14px; margin-top: 15px; background: #eee; padding: 10px; border-radius: 10px; word-break: break-all; }
+        .btn { background: #fff; border: 2px solid #ff69b4; border-radius: 15px; padding: 15px; margin: 5px; cursor: pointer; width: 45%; font-size: 14px; transition: 0.2s; vertical-align: top; }
+        .btn span { font-size: 24px; display: block; margin-bottom: 5px; }
+        .status-box { background: #f0f0f0; padding: 15px; border-radius: 15px; margin-top: 20px; font-size: 14px; color: #555; border: 1px dashed #ccc; }
     </style>
 </head>
 <body>
@@ -24,20 +22,23 @@
     
     <div style="display: flex; flex-wrap: wrap; justify-content: center;">
         <button class="btn" onclick="copyToken()">
-            <span>📲</span> שלב 1: העתק מפתח ירדן
+            <span>📲</span> שלב 1: העתק מפתח
         </button>
-        <button class="btn" onclick="sendToFirebase('אל תשכח מטרנה לרום! 🍼')">
+        <button class="btn" onclick="alert('בדיקה: מטרנה בדרך!')">
             <span>🍼</span> מטרנה לרום
         </button>
-        <button class="btn" onclick="sendToFirebase('צריך לקנות חלב 🥛')">
+        <button class="btn" onclick="alert('בדיקה: חלב בדרך!')">
             <span>🥛</span> להביא חלב
         </button>
-        <button class="btn" onclick="sendToFirebase('אוהבת אותך! ❤️')">
+        <button class="btn" onclick="alert('בדיקה: אהבה בדרך!')">
             <span>💖</span> הודעת אהבה
         </button>
     </div>
-    
-    <p id="status">טוען מערכת... אנא אשרי התראות אם תתבקשי</p>
+
+    <div id="status" class="status-box">
+        טוען הגדרות... <br>
+        (אם יש שגיאה, ודאי שפתחת מהמסך הבית)
+    </div>
 </div>
 
 <script>
@@ -50,32 +51,47 @@
         appId: "1:712427275013:web:a6a579f958815690b86d6c"
     };
 
-    firebase.initializeApp(firebaseConfig);
-    const messaging = firebase.messaging();
+    const statusDiv = document.getElementById('status');
 
-    // רישום לקבלת התראות
-    messaging.getToken({ vapidKey: 'NH9xnzPfdIK_QLxKGmX9ErMYzDIBuAIzK2crtUEhmTU' })
-        .then((currentToken) => {
-            if (currentToken) {
-                document.getElementById('status').innerText = "המפתח שלך מוכן! שלחי אותו לירדן כדי שיוכל לשלוח לך הודעות.";
-                window.myToken = currentToken;
-            } else {
-                document.getElementById('status').innerText = "לא התקבל מפתח. בדקי הרשאות.";
-            }
-        }).catch((err) => {
-            document.getElementById('status').innerText = "שגיאה: " + err;
-        });
+    // פונקציה שבודקת בזהירות אם יש התראות
+    function startApp() {
+        if (!('Notification' in window)) {
+            statusDiv.innerHTML = "<b>שימי לב:</b> באייפון חייבים ללחוץ על 'שיתוף' ואז 'הוסף למסך הבית' כדי שזה יעבוד.";
+            return;
+        }
 
-    function copyToken() {
-        if(window.myToken) {
-            navigator.clipboard.writeText(window.myToken);
-            alert("המפתח הועתק! שלחי אותו לירדן בוואטסאפ.");
+        try {
+            firebase.initializeApp(firebaseConfig);
+            const messaging = firebase.messaging();
+
+            messaging.getToken({ vapidKey: 'NH9xnzPfdIK_QLxKGmX9ErMYzDIBuAIzK2crtUEhmTU' })
+                .then((token) => {
+                    if (token) {
+                        statusDiv.style.background = "#e8f5e9";
+                        statusDiv.innerHTML = "✅ המערכת מוכנה! <br> לחצי על 'העתק מפתח' ושלחי לי.";
+                        window.myToken = token;
+                    }
+                })
+                .catch((err) => {
+                    statusDiv.innerHTML = "צריך לאשר התראות בטלפון. <br> (הגדרות > התראות)";
+                });
+        } catch (e) {
+            statusDiv.innerHTML = "משהו השתבש בטעינה. ודאי שאת פותחת מהמסך הבית.";
         }
     }
 
-    function sendToFirebase(msg) {
-        alert("כדי לשלוח את ההודעה: '" + msg + "' באמת, נשתמש במערכת השליחה של Firebase שבנינו.");
+    function copyToken() {
+        if (window.myToken) {
+            navigator.clipboard.writeText(window.myToken);
+            alert("המפתח הועתק בהצלחה! תדביקי אותו פה בצ'אט.");
+        } else {
+            alert("עדיין אין מפתח. ודאי שאישרת התראות באפליקציה שעל מסך הבית.");
+        }
     }
+
+    // הפעלת האפליקציה
+    startApp();
 </script>
+
 </body>
 </html>
