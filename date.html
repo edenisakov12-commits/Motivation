@@ -3,113 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>דייט-לנד אשקלון ❤️</title>
+    <title>הדייטים של עדן וירדן ❤️</title>
     <style>
         :root {
-            --home-bg: #fff0f6; --out-bg: #e6f7ff; --accent: #ff2d55;
+            --eden-color: #ffafbd;
+            --yarden-color: #ffc3a0;
+            --accent: #ff4b2b;
         }
         body { 
-            font-family: 'Segoe UI', sans-serif; background: #fdfdfd; 
+            font-family: 'Segoe UI', Tahoma, sans-serif; 
+            background: linear-gradient(to bottom, #ffafbd, #ffc3a0); 
             margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh;
+            color: #444;
         }
-        .container { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; padding: 20px; }
-        .card {
-            width: 150px; height: 150px; border-radius: 30px; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; cursor: pointer; transition: 0.3s;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.05); border: 3px solid white;
+        .main-card {
+            background: rgba(255, 255, 255, 0.9); padding: 30px; border-radius: 40px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1); text-align: center; width: 90%; max-width: 400px;
         }
-        .card:hover { transform: translateY(-10px); }
-        .home { background-color: var(--home-bg); }
-        .out { background-color: var(--out-bg); }
+        h1 { font-size: 1.8rem; color: #ff4b2b; margin-bottom: 10px; }
+        .names { font-weight: bold; font-size: 1.2rem; margin-bottom: 20px; color: #666; }
         
-        #overlay {
+        .game-buttons { display: flex; gap: 15px; justify-content: center; margin-top: 20px; }
+        .choice-btn {
+            flex: 1; padding: 20px; border-radius: 25px; border: none; cursor: pointer;
+            font-weight: bold; transition: 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: flex; flex-direction: column; align-items: center; gap: 10px;
+        }
+        .btn-home { background: #fff0f6; color: #d81b60; }
+        .btn-out { background: #e6f7ff; color: #0077b6; }
+        .choice-btn:active { transform: scale(0.9); }
+
+        /* חלונית התוצאה */
+        #modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.98); z-index: 100; flex-direction: column;
-            align-items: center; justify-content: center; text-align: center; padding: 20px;
+            background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;
         }
-        .result-box {
-            background: white; padding: 35px; border-radius: 40px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.1); max-width: 450px; border: 1px solid #eee;
+        .modal-content {
+            background: white; padding: 30px; border-radius: 35px; width: 85%; max-width: 350px;
+            text-align: center; position: relative; animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .btn {
-            border: none; padding: 12px 30px; border-radius: 50px; font-weight: bold; cursor: pointer; margin: 10px;
-        }
-        .close-btn { background: var(--accent); color: white; }
-        .search-btn { background: #4caf50; color: white; text-decoration: none; display: inline-block; font-size: 0.9rem; }
-        .counter { margin-top: 20px; font-size: 0.8rem; color: #999; }
+        @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        
+        .share-wa { background: #25D366; color: white; padding: 10px 20px; border-radius: 50px; text-decoration: none; display: inline-block; margin-top: 15px; font-weight: bold; }
+        .reset-link { margin-top: 25px; font-size: 0.8rem; color: #999; cursor: pointer; border: none; background: none; text-decoration: underline; }
     </style>
 </head>
 <body>
 
-    <h1 style="color: var(--accent);">דייט באשקלון והסביבה ❤️</h1>
-    <div id="stats" class="counter"></div>
+    <div class="main-card">
+        <h1>הדייטים שלנו ❤️</h1>
+        <div class="names">עדן & ירדן</div>
+        <p>מה נעשה הפעם? בחרו אווירה:</p>
+        
+        <div class="game-buttons">
+            <button class="choice-btn btn-home" onclick="pick('home')">
+                <span style="font-size: 2.5rem;">🏠</span>
+                <span>בבית</span>
+            </button>
+            <button class="choice-btn btn-out" onclick="pick('out')">
+                <span style="font-size: 2.5rem;">✨</span>
+                <span>בחוץ</span>
+            </button>
+        </div>
 
-    <div class="container">
-        <div class="card home" onclick="draw('home')">
-            <span style="font-size: 3.5rem;">🏠</span>
-            <strong>בבית</strong>
-        </div>
-        <div class="card out" onclick="draw('out')">
-            <span style="font-size: 3.5rem;">🌊</span>
-            <strong>יוצאים</strong>
-        </div>
+        <div id="stats" style="margin-top: 20px; font-size: 0.9rem; color: #888;"></div>
+        <button class="reset-link" onclick="resetAll()">איפוס נתונים</button>
     </div>
 
-    <div id="overlay">
-        <div class="result-box">
-            <div id="res-emoji" style="font-size: 5rem;"></div>
-            <div id="res-text" style="font-size: 1.6rem; margin: 20px 0; font-weight: bold;"></div>
-            <div id="extra-info"></div>
-            <button class="btn close-btn" onclick="document.getElementById('overlay').style.display='none'">אחלה רעיון!</button>
+    <div id="modal">
+        <div class="modal-content">
+            <div id="res-emoji" style="font-size: 4rem;"></div>
+            <h2 id="res-title" style="color: #333; margin: 15px 0;"></h2>
+            <div id="res-desc" style="color: #666; margin-bottom: 20px;"></div>
+            
+            <a id="wa-link" href="#" target="_blank" class="share-wa">שלחי לירדן בוואטסאפ 📱</a>
+            <br>
+            <button onclick="closeModal()" style="margin-top: 15px; border: none; background: #eee; padding: 8px 20px; border-radius: 20px; cursor: pointer;">סגור</button>
         </div>
     </div>
 
     <script>
         const database = {
             home: [
-                {t: "ערב טעימות יין וגבינות מ'מחלבות דרומיות' בסלון", e: "🍷"},
-                {t: "סדנת שוקולד ביתית - ממיסים ומכינים פרלינים", e: "🍫"},
-                {t: "מרתון סרטים בכיכוב השחקן ששניכם הכי אוהבים", e: "🎬"},
-                {t: "ערב 'משחקי ילדות' - טאקי, שחמט או מונופול", e: "🎲"},
-                {t: "בישול משותף של ארוחת 3 מנות (מנה ראשונה, עיקרית וקינוח)", e: "👨‍🍳"},
-                {t: "פיקניק לילי על המרפסת עם מוזיקה שקטה", e: "🌙"}
+                {t: "ערב סרט ופיצה", d: "עדן וירדן בערב של שקט, פיצה חמה וסרט טוב מתחת לשמיכה", e: "🍕"},
+                {t: "תחרות מאסטר-שף", d: "מבשלים משהו משוגע ממה שיש במקרר ומחליטים מי השף המנצח", e: "👨‍🍳"},
+                {t: "ערב משחקי קופסה", d: "מוציאים את הטאקי או המונופול ותחרות עד הסוף!", e: "🎲"},
+                {t: "ספא ביתי מפנק", d: "נרות, מוזיקה רגועה ומסאז' אחד לשנייה אחרי יום ארוך", e: "🕯️"},
+                {t: "ערב קוקטיילים", d: "מנסים להכין משקאות צבעוניים ממה שיש בארון המשקאות", e: "🍸"}
             ],
             out: [
-                {t: "ערב סטנד-אפ קורע מצחוק! בדקו הופעות קרובות", e: "🎤", search: "הופעות סטנד אפ באשקלון והסביבה"},
-                {t: "הופעה חיה או הצגת תיאטרון בהיכל התרבות אשקלון", e: "🎭", search: "היכל התרבות אשקלון לוח הופעות"},
-                {t: "הליכה רומנטית במרינה אשקלון וקינוח מול המים", e: "⛵"},
-                {t: "דייט גלידה לילי בטיילת בר כוכבא", e: "🍦"},
-                {t: "ערב סרט ב-Hot Cinema באשקלון עם פופקורן ענק", e: "🍿", search: "הוט סינמה אשקלון סרטים"},
-                {t: "ביקור בבר יין או פאב מקומי במרינה", e: "🍻"},
-                {t: "טיול שקיעה בגן הלאומי אשקלון (לפני שנסגר)", e: "🏛️"},
-                {t: "נסיעה קצרה למתחם 'מבנה' או 'גלובוס סנטר' לארוחה מפנקת", e: "🍔"}
+                {t: "דייט גלידה", d: "יוצאים לסיבוב קצר, אוכלים גלידה ומדברים על הכל חוץ מעבודה וילדים", e: "🍦"},
+                {t: "ערב סטנד-אפ", d: "יוצאים לצחוק קצת מהלב ולשכוח מהכל", e: "🎤"},
+                {t: "מסעדה חדשה", d: "הולכים למקום שמעולם לא הייתם בו ומזמינים משהו מוזר", e: "🍽️"},
+                {t: "טיול לילי בים", d: "הליכה עם רגליים בחול וקפה בתרמוס מול הגלים", e: "🌊"},
+                {t: "סרט ב-VIP", d: "כי מגיע לכם להתפנק בכורסאות נוחות עם פופקורן", e: "🎟️"}
             ]
         };
 
-        let counts = JSON.parse(localStorage.getItem('date_counts')) || { home: 0, out: 0 };
+        let stats = JSON.parse(localStorage.getItem('eden_yarden_stats')) || { home: 0, out: 0 };
 
-        function draw(type) {
+        function pick(type) {
             const list = database[type];
             const idea = list[Math.floor(Math.random() * list.length)];
             
             document.getElementById('res-emoji').innerText = idea.e;
-            document.getElementById('res-text').innerText = idea.t;
+            document.getElementById('res-title').innerText = idea.t;
+            document.getElementById('res-desc').innerText = idea.d;
             
-            const extra = document.getElementById('extra-info');
-            extra.innerHTML = "";
-            if(idea.search) {
-                extra.innerHTML = `<a href="https://www.google.com/search?q=${encodeURIComponent(idea.search)}" target="_blank" class="btn search-btn">🔎 בדוק כרטיסים ומועדים</a>`;
-            }
-
-            counts[type]++;
-            localStorage.setItem('date_counts', JSON.stringify(counts));
+            // הכנת לינק לוואטסאפ
+            const waText = encodeURIComponent(`היי ירדן, יצא לנו דייט! ${idea.e}\n${idea.t}: ${idea.d}`);
+            document.getElementById('wa-link').href = `https://wa.me/?text=${waText}`;
+            
+            stats[type]++;
+            localStorage.setItem('eden_yarden_stats', JSON.stringify(stats));
             updateStats();
-            document.getElementById('overlay').style.display = 'flex';
+            document.getElementById('modal').style.display = 'flex';
         }
 
         function updateStats() {
-            document.getElementById('stats').innerText = `עשינו עד היום: ${counts.home} דייטים בבית ו-${counts.out} בחוץ!`;
+            document.getElementById('stats').innerText = `צברנו יחד: ${stats.home + stats.out} דייטים!`;
         }
+
+        function closeModal() { document.getElementById('modal').style.display = 'none'; }
+        
+        function resetAll() {
+            if(confirm("לאפס את המונה?")) {
+                stats = { home: 0, out: 0 };
+                localStorage.removeItem('eden_yarden_stats');
+                updateStats();
+            }
+        }
+
         updateStats();
     </script>
 </body>
